@@ -1,8 +1,32 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Cover Letter Generator
+
+A Next.js application that helps you generate personalized cover letters using AI. Built with Next.js 15, TypeScript, and Tailwind CSS.
+
+## Features
+
+- 🤖 AI-powered cover letter generation using OpenAI's GPT-4
+- 📝 Multi-step wizard interface for easy cover letter creation
+- 🎯 Smart keyword extraction from job descriptions
+- 💾 Local storage persistence for managing multiple cover letters
+- 🎨 Clean, modern UI with dark mode support
+- 📱 Responsive design with mobile-friendly sidebar
 
 ## Getting Started
 
-First, run the development server:
+1. Clone the repository
+2. Install dependencies:
+
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+# or
+bun install
+```
+
+3. Run the development server:
 
 ```bash
 npm run dev
@@ -14,23 +38,37 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+5. Paste your OpenAI API key into the field in the sidebar.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## How It Works
 
-## Learn More
+1. **Job Description**: Paste the job description you're applying for
+2. **Company Info**: Add information about the company from their website or careers page
+3. **Keywords**: AI extracts relevant keywords from the job description and company info
+4. **Review**: Generate and edit your cover letter, then export to PDF
 
-To learn more about Next.js, take a look at the following resources:
+## Tech Stack
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Next.js 15](https://nextjs.org/) - React framework
+- [TypeScript](https://www.typescriptlang.org/) - Type safety
+- [Tailwind CSS](https://tailwindcss.com/) - Styling
+- [OpenAI API](https://openai.com/) - AI-powered content generation
+- [shadcn/ui](https://ui.shadcn.com/) - UI component library
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Project Structure
 
-## Deploy on Vercel
+- `/src/app` - Next.js app router pages and layouts
+- `/src/components` - Reusable React components
+- `/src/hooks` - Custom React hooks
+- `/src/lib` - Utility functions and type definitions
+- `/src/types` - TypeScript type definitions
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Contributing
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
