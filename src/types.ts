@@ -1,7 +1,7 @@
 export type Keyword = {
   keyword: string;
   category: string;
-  selected: boolean;
+  selected?: boolean;
 };
 
 export interface CoverLetter {

@@ -1,14 +1,14 @@
 import type { CoverLetter } from "@/types";
-import OpenAI from "openai";
+import { createOpenAI } from "@ai-sdk/openai";
+import { generateText } from "ai";
 
 export const generateCoverLetter = async (
   coverLetter: CoverLetter,
   resume: string,
   apiKey: string | undefined
 ): Promise<string> => {
-  const openai = new OpenAI({
+  const openai = createOpenAI({
     apiKey,
-    dangerouslyAllowBrowser: true,
   });
 
   const prompt = `Based on the provided job description, company info, resume and keywords, generate a cover letter in the following format:
@@ -38,10 +38,10 @@ ${coverLetter.keywords
   .map((k) => k.keyword)
   .join(", ")}`;
 
-  const completion = await openai.chat.completions.create({
-    model: "gpt-4o",
-    messages: [{ role: "user", content: prompt }],
+  const { text } = await generateText({
+    model: openai("gpt-4o"),
+    prompt,
   });
 
-  return completion.choices[0].message.content ?? "";
+  return text;
 };

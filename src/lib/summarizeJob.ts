@@ -1,20 +1,27 @@
-import { type CoverLetter, type Keyword } from "@/types";
-import OpenAI from "openai";
-import { jobSummarySchema } from "./jobSummarySchema";
+import { type CoverLetter } from "@/types";
+import { createOpenAI } from "@ai-sdk/openai";
+import { generateObject } from "ai";
+import { z } from "zod";
 
-type JobSummary = {
-  keywords: Keyword[];
-  roleName: string;
-  companyName: string;
-};
+const schema = z.object({
+  roleName: z.string(),
+  companyName: z.string(),
+  keywords: z.array(
+    z.object({
+      keyword: z.string(),
+      category: z.string(),
+    })
+  ),
+});
+
+type JobSummary = z.infer<typeof schema>;
 
 export const summarizeJob = async (
   coverLetter: CoverLetter,
   apiKey: string
 ): Promise<JobSummary> => {
-  const openai = new OpenAI({
+  const openai = createOpenAI({
     apiKey,
-    dangerouslyAllowBrowser: true,
   });
 
   const prompt = `Provide structured data based on the following job description and company info. Respond in JSON format:
@@ -34,25 +41,16 @@ Company Info:
 ${coverLetter.companyInfo}`;
 
   try {
-    const completion = await openai.chat.completions.create({
-      model: "gpt-4o",
-      temperature: 0.7,
-      messages: [
-        {
-          role: "user",
-          content: prompt,
-        },
-      ],
-      response_format: {
-        type: "json_schema",
-        json_schema: jobSummarySchema,
-      },
+    const result = await generateObject({
+      model: openai("gpt-4o", { structuredOutputs: true }),
+      schemaName: "jobSummary",
+      schemaDescription:
+        "Structured data based on the following job description and company info",
+      schema,
+      prompt,
     });
 
-    const response = JSON.parse(
-      completion.choices[0].message.content ?? ""
-    ) as JobSummary;
-    return response;
+    return result.object;
   } catch (error) {
     console.error("Error extracting keywords:", error);
     throw error;

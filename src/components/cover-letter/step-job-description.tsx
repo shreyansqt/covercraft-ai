@@ -1,18 +1,13 @@
-"use client";
-import { useCoverLetter } from "@/hooks/use-cover-letter";
 import { Label } from "@radix-ui/react-label";
-import { useEffect } from "react";
 import { Textarea } from "../ui/textarea";
+import type { StepComponentProps } from "./types";
 
-export const StepJobDescription = ({ id }: { id: string }) => {
-  const { coverLetter, updateCoverLetter } = useCoverLetter(id);
-  useEffect(() => {
-    updateCoverLetter({
-      currentStep: "job-description",
-    });
-  }, []);
+export const StepJobDescription = ({
+  coverLetter,
+  onUpdate,
+}: StepComponentProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    updateCoverLetter({
+    onUpdate({
       jobDescription: e.target.value,
     });
   };

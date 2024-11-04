@@ -1,19 +1,19 @@
 "use client";
-import { useCoverLetter } from "@/hooks/use-cover-letter";
 import { summarizeJob } from "@/lib/summarizeJob";
 import type { Keyword } from "@/types";
 import { Label } from "@radix-ui/react-label";
 import { RefreshCcw } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
+import type { StepComponentProps } from "./types";
 
-export const StepKeywords = ({ id }: { id: string }) => {
-  const { coverLetter, updateCoverLetter } = useCoverLetter(id);
+export const StepKeywords = ({ coverLetter, onUpdate }: StepComponentProps) => {
   const [isLoading, setIsLoading] = useState(false);
   const [apiKey] = useLocalStorage("apiKey", "");
-  const fetchKeywords = async () => {
+
+  const fetchKeywords = useCallback(async () => {
     if (coverLetter.jobDescription === "" || coverLetter.companyInfo === "")
       return;
     setIsLoading(true);
@@ -21,22 +21,19 @@ export const StepKeywords = ({ id }: { id: string }) => {
       coverLetter,
       apiKey
     );
-    updateCoverLetter({
+    onUpdate({
       roleName,
       companyName,
       keywords,
     });
     setIsLoading(false);
-  };
+  }, [coverLetter, apiKey, onUpdate]);
 
   useEffect(() => {
-    updateCoverLetter({
-      currentStep: "keywords",
-    });
     if (coverLetter.keywords.length === 0) {
       fetchKeywords();
     }
-  }, []);
+  }, [fetchKeywords, coverLetter.keywords]);
 
   const keywordCategoryMap = new Map<string, Keyword[]>();
   for (const keyword of coverLetter.keywords) {
@@ -77,7 +74,7 @@ export const StepKeywords = ({ id }: { id: string }) => {
                       checked={keyword.selected}
                       onCheckedChange={(checked) => {
                         if (typeof checked === "boolean") {
-                          updateCoverLetter({
+                          onUpdate({
                             keywords: coverLetter.keywords.map((k) =>
                               k.keyword === keyword.keyword
                                 ? { ...k, selected: checked }

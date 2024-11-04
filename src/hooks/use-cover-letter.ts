@@ -11,15 +11,14 @@ export const useCoverLetter = (id: string) => {
     useLocalStorage<CoverLetter>(`cover-letter-${id}`, {
       id,
       keywords: [],
-      selectedKeywords: [],
       currentStep: "job-description",
     });
 
   const updateCoverLetter = useCallback(
     (updates: Partial<CoverLetter>) => {
-      setCoverLetter({ ...coverLetter, ...updates });
+      setCoverLetter((coverLetter) => ({ ...coverLetter, ...updates }));
     },
-    [coverLetter, setCoverLetter]
+    [setCoverLetter]
   );
 
   const deleteCoverLetter = () => {

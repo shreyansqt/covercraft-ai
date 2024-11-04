@@ -1,40 +1,39 @@
 "use client";
-import { useCoverLetter } from "@/hooks/use-cover-letter";
 import { generateCoverLetter } from "@/lib/generateCoverLetter";
 import { Label } from "@radix-ui/react-label";
 import { RefreshCcw } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
+import type { StepComponentProps } from "./types";
 
-export const StepReview = ({ id }: { id: string }) => {
-  const { coverLetter, updateCoverLetter } = useCoverLetter(id);
+export const StepReview = ({ coverLetter, onUpdate }: StepComponentProps) => {
   const [apiKey] = useLocalStorage("apiKey", "");
   const [resume] = useLocalStorage("resume", "");
   const [isLoading, setIsLoading] = useState(false);
 
-  const generate = async () => {
+  const generate = useCallback(async () => {
     setIsLoading(true);
     const content = await generateCoverLetter(coverLetter, resume, apiKey);
-    updateCoverLetter({
+    onUpdate({
       content,
     });
     setIsLoading(false);
-  };
+  }, [coverLetter, resume, apiKey, onUpdate]);
+
   useEffect(() => {
-    updateCoverLetter({
-      currentStep: "review",
-    });
     if (!coverLetter.content) {
       generate();
     }
-  }, []);
+  }, [generate, coverLetter.content]);
+
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    updateCoverLetter({
+    onUpdate({
       content: e.target.value,
     });
   };
+
   return (
     <div className="flex flex-col gap-4 h-full">
       <div className="flex justify-between items-center">
