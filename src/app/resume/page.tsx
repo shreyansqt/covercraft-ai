@@ -1,4 +1,6 @@
 "use client";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { useLocalStorage } from "usehooks-ts";
 
 export default function ResumePage() {
@@ -10,10 +12,10 @@ export default function ResumePage() {
   };
 
   return (
-    <div className="flex flex-col flex-1 p-4 h-full">
-      <h1 className="mb-4 font-bold text-2xl">Paste Your Resume</h1>
-      <textarea
-        className="flex-1 p-4 border rounded-lg w-full h-96 resize-none"
+    <div className="flex flex-col p-6 h-full">
+      <Label className="mb-2 text-xl">Paste Your Resume</Label>
+      <Textarea
+        className="flex-1 resize-none"
         value={resumeContent}
         onChange={handleResumeChange}
         placeholder="Paste your resume content here..."

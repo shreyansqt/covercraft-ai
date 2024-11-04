@@ -4,8 +4,8 @@ import { Label } from "@radix-ui/react-label";
 import { RefreshCcw } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
+import { RichTextEditor } from "../rich-text-editor";
 import { Button } from "../ui/button";
-import { Textarea } from "../ui/textarea";
 import type { StepComponentProps } from "./types";
 
 export const StepReview = ({ coverLetter, onUpdate }: StepComponentProps) => {
@@ -28,9 +28,9 @@ export const StepReview = ({ coverLetter, onUpdate }: StepComponentProps) => {
     }
   }, [generate, coverLetter.content]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChange = (value: string) => {
     onUpdate({
-      content: e.target.value,
+      content: value,
     });
   };
 
@@ -51,12 +51,12 @@ export const StepReview = ({ coverLetter, onUpdate }: StepComponentProps) => {
       {isLoading ? (
         <div>Loading...</div>
       ) : (
-        <Textarea
-          id="coverLetter"
-          value={coverLetter.content}
-          onChange={handleChange}
-          className="flex-1 resize-none"
-        />
+        <div className="flex flex-col flex-1">
+          <RichTextEditor
+            value={coverLetter.content || ""}
+            onChange={handleChange}
+          />
+        </div>
       )}
     </div>
   );

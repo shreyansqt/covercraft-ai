@@ -23,6 +23,8 @@ Here are three key reasons why I would be an excellent fit:
 
 I am looking forward to contributing my skills in taking [team / company name] to the next level. 
 
+Make sure to return the cover letter in html tags such as <p>, <ul>, <ol>, <li> & <em>. Don't use any other html tags.
+
 Job Description:
 ${coverLetter.jobDescription}
 
