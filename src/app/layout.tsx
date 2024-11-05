@@ -76,7 +76,7 @@ export const metadata: Metadata = {
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${avenirNext.variable} antialiased`}>
+      <body className={`${avenirNext.variable} antialiased relative`}>
         <Analytics />
         <SidebarProvider>
           <AppSidebar />

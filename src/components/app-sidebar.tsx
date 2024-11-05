@@ -10,6 +10,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { useCoverLetters } from "@/hooks/use-cover-letters";
 import { ChevronDown, FilePlus2, FileText, Sparkles } from "lucide-react";
@@ -50,10 +51,11 @@ export const AppSidebar = () => {
   return (
     <Sidebar className="border-r">
       <SidebarHeader>
-        <div className="flex flex-col gap-2">
-          <Link href="/">
-            <h1 className="font-bold">CoverCraft AI</h1>
+        <div className="flex justify-between items-center">
+          <Link href="/" className="font-bold">
+            CoverCraft AI
           </Link>
+          <SidebarTrigger />
         </div>
         <Button onClick={handleCreateCoverLetter} className="w-full">
           <FilePlus2 className="mr-2 w-4 h-4" /> New Cover Letter

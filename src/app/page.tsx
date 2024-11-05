@@ -1,8 +1,14 @@
+"use client";
 import { Separator } from "@/components/ui/separator";
+import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 
 export default function Home() {
+  const { open, isMobile } = useSidebar();
   return (
     <div className="flex flex-col justify-center items-center w-full h-screen">
+      {(!open || isMobile) && (
+        <SidebarTrigger className="top-4 left-4 absolute" />
+      )}
       <div className="space-y-6">
         <h2 className="mb-4 font-bold text-2xl">Get Started</h2>
         <ol className="space-y-4 ml-4 list-decimal">
