@@ -16,6 +16,8 @@ export async function POST(request: Request) {
     const { content, fileName } = await request.json();
     const { puppeteer } = await getPuppeteer();
 
+    console.log("app route", process.env.NEXT_PUBLIC_URL);
+
     // Add Tailwind CSS and Avenir font styles to the content
     const contentWithStyles = `
       <style>
@@ -45,6 +47,8 @@ export async function POST(request: Request) {
       </style>
       ${content}
     `;
+
+    console.log("contentWithStyles", contentWithStyles);
 
     let browser;
     if (process.env.NODE_ENV === "development") {

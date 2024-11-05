@@ -26,7 +26,13 @@ Selected Keywords:
 ${coverLetter.keywords
   .filter((k) => k.selected)
   .map((k) => k.keyword)
-  .join(", ")}`;
+  .join(", ")}
+  
+  Today's date: ${new Date().toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  })}`;
 
   const { text } = await generateText({
     model: openai("gpt-4o"),
