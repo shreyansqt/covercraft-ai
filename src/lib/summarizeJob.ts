@@ -1,4 +1,4 @@
-import { type CoverLetter } from "@/types";
+import { type CoverLetter, type LLMSettings } from "@/types";
 import { createOpenAI } from "@ai-sdk/openai";
 import { generateObject } from "ai";
 import { z } from "zod";
@@ -18,21 +18,13 @@ type JobSummary = z.infer<typeof schema>;
 
 export const summarizeJob = async (
   coverLetter: CoverLetter,
-  apiKey: string
+  llmSettings: LLMSettings
 ): Promise<JobSummary> => {
   const openai = createOpenAI({
-    apiKey,
+    apiKey: llmSettings.apiKey,
   });
 
-  const prompt = `Provide structured data based on the following job description and company info. Respond in JSON format:
-  roleName: (job title/role name)
-  companyName: (company name)
-  keywords: (list of keywords, each between 1-3 words with following categories)
-    - Company Values
-    - Key Responsibilities
-    - Technical Requirements
-    - Leadership Skills
-    - Soft Skills
+  const prompt = `${llmSettings.jobSummaryPrompt}
 
 Job Description:
 ${coverLetter.jobDescription}

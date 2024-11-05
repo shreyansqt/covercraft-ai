@@ -1,4 +1,5 @@
 "use client";
+import { useLLMSettings } from "@/hooks/use-llm-settings";
 import { generateCoverLetter } from "@/lib/generateCoverLetter";
 import { Label } from "@radix-ui/react-label";
 import { RefreshCcw } from "lucide-react";
@@ -9,18 +10,18 @@ import { Button } from "../ui/button";
 import type { StepComponentProps } from "./types";
 
 export const StepReview = ({ coverLetter, onUpdate }: StepComponentProps) => {
-  const [apiKey] = useLocalStorage("apiKey", "");
   const [resume] = useLocalStorage("resume", "");
+  const { llmSettings } = useLLMSettings();
   const [isLoading, setIsLoading] = useState(false);
 
   const generate = useCallback(async () => {
     setIsLoading(true);
-    const content = await generateCoverLetter(coverLetter, resume, apiKey);
+    const content = await generateCoverLetter(coverLetter, resume, llmSettings);
     onUpdate({
       content,
     });
     setIsLoading(false);
-  }, [coverLetter, resume, apiKey, onUpdate]);
+  }, [coverLetter, resume, llmSettings, onUpdate]);
 
   useEffect(() => {
     if (!coverLetter.content) {
@@ -40,6 +41,7 @@ export const StepReview = ({ coverLetter, onUpdate }: StepComponentProps) => {
         <Label htmlFor="coverLetter">Generated Cover Letter</Label>
         <Button
           variant="outline"
+          size="sm"
           onClick={generate}
           disabled={isLoading}
           className="flex items-center gap-2"

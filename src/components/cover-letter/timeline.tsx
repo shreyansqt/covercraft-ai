@@ -23,7 +23,7 @@ export function Timeline({ steps, id }: { steps: Step[]; id: string }) {
             className="flex flex-col items-center"
           >
             <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
+              className={`w-8 h-8 line-height-8 rounded-full flex items-center justify-center transition-colors ${
                 i + 1 <= currentStepNumber
                   ? "bg-primary text-primary-foreground"
                   : "bg-muted text-muted-foreground"

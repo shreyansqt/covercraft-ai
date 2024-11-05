@@ -1,17 +1,17 @@
 "use client";
+import { useLLMSettings } from "@/hooks/use-llm-settings";
 import { summarizeJob } from "@/lib/summarizeJob";
 import type { Keyword } from "@/types";
 import { Label } from "@radix-ui/react-label";
 import { RefreshCcw } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import { useLocalStorage } from "usehooks-ts";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
 import type { StepComponentProps } from "./types";
 
 export const StepKeywords = ({ coverLetter, onUpdate }: StepComponentProps) => {
   const [isLoading, setIsLoading] = useState(false);
-  const [apiKey] = useLocalStorage("apiKey", "");
+  const { llmSettings } = useLLMSettings();
 
   const fetchKeywords = useCallback(async () => {
     if (coverLetter.jobDescription === "" || coverLetter.companyInfo === "")
@@ -19,7 +19,7 @@ export const StepKeywords = ({ coverLetter, onUpdate }: StepComponentProps) => {
     setIsLoading(true);
     const { roleName, companyName, keywords } = await summarizeJob(
       coverLetter,
-      apiKey
+      llmSettings
     );
     onUpdate({
       roleName,
@@ -27,7 +27,7 @@ export const StepKeywords = ({ coverLetter, onUpdate }: StepComponentProps) => {
       keywords,
     });
     setIsLoading(false);
-  }, [coverLetter, apiKey, onUpdate]);
+  }, [coverLetter, llmSettings, onUpdate]);
 
   useEffect(() => {
     if (coverLetter.keywords.length === 0) {
@@ -45,9 +45,10 @@ export const StepKeywords = ({ coverLetter, onUpdate }: StepComponentProps) => {
   return (
     <div className="flex flex-col h-full">
       <div className="flex justify-between">
-        <Label className="font-bold text-2xl">Keywords</Label>
+        <Label>Keywords</Label>
         <Button
           variant="outline"
+          size="sm"
           onClick={fetchKeywords}
           disabled={isLoading}
           className="flex items-center gap-2"

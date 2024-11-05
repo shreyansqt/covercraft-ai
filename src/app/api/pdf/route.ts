@@ -21,16 +21,29 @@ export async function POST(request: Request) {
       <style>
         @font-face {
           font-family: 'Avenir';
-          src: url('AvenirNextLTPro-Regular.otf') format('woff2');
+          src: url('/fonts/AvenirNextLTPro-Regular.otf') format('woff2');
         }
-        * {
+        body {
           font-family: 'Avenir', sans-serif;
+          font-size: 16px;
+          line-height: 1.4;
+        }
+        ul {
+          margin-bottom: 8px;
+          list-style-type: disc;
+        }
+        ol {
+        margin-bottom: 8px;
+          list-style-type: decimal;
+        }
+        p {
+          margin-bottom: 8px;
+        }
+        a {
+          color: #000;
         }
       </style>
-      <script src="https://cdn.tailwindcss.com"></script>
-      <div class="min-h-screen bg-white">
-        ${content}
-      </div>
+      ${content}
     `;
 
     let browser;

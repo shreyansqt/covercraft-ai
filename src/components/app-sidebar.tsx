@@ -2,26 +2,44 @@
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useCoverLetters } from "@/hooks/use-cover-letters";
-import { PlusCircle } from "lucide-react";
+import { ChevronDown, FileText, PlusCircle, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useLocalStorage } from "usehooks-ts";
 import { CoverLetterMenuItem } from "./cover-letter-menu-item";
 import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "./ui/collapsible";
+
+const settingsMenuItems = [
+  {
+    label: "Resume",
+    href: "/settings/resume",
+    icon: FileText,
+  },
+  {
+    label: "LLM",
+    href: "/settings/llm",
+    icon: Sparkles,
+  },
+];
 
 export const AppSidebar = () => {
   const pathname = usePathname();
   const router = useRouter();
   const { coverLetterIds, createCoverLetter } = useCoverLetters();
-  const [apiKey, setApiKey] = useLocalStorage("apiKey", "");
 
   const handleCreateCoverLetter = () => {
     const id = createCoverLetter();
@@ -43,24 +61,34 @@ export const AppSidebar = () => {
           ))}
         </SidebarMenu>
       </SidebarContent>
-      <div className="mt-auto p-4 border-t">
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton isActive={pathname === "/resume"} asChild>
-              <Link href="/resume">Resume</Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-        <Label htmlFor="apiKey">OpenAI API Key</Label>
-        <Input
-          id="apiKey"
-          type="password"
-          placeholder="OpenAI API Key"
-          className="px-3 py-2 border rounded-md w-full text-sm"
-          value={apiKey}
-          onChange={(e) => setApiKey(e.target.value)}
-        />
-      </div>
+      <SidebarFooter>
+        <Collapsible defaultOpen className="group/collapsible">
+          <SidebarGroup>
+            <SidebarGroupLabel asChild>
+              <CollapsibleTrigger>
+                Settings
+                <ChevronDown className="group-data-[state=open]/collapsible:rotate-180 ml-auto transition-transform" />
+              </CollapsibleTrigger>
+            </SidebarGroupLabel>
+            <CollapsibleContent>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  {settingsMenuItems.map(({ href, label, icon: Icon }) => (
+                    <SidebarMenuItem key={href}>
+                      <SidebarMenuButton isActive={pathname === href} asChild>
+                        <Link href={href} className="flex items-center gap-2">
+                          <Icon className="size-4" />
+                          <span>{label}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </CollapsibleContent>
+          </SidebarGroup>
+        </Collapsible>
+      </SidebarFooter>
     </Sidebar>
   );
 };

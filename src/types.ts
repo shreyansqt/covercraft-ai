@@ -16,3 +16,9 @@ export interface CoverLetter {
 }
 
 export type Step = "job-description" | "company-info" | "keywords" | "review";
+
+export type LLMSettings = {
+  apiKey?: string;
+  jobSummaryPrompt: string;
+  coverLetterPrompt: string;
+};
