@@ -33,10 +33,16 @@ export async function POST(request: Request) {
         ul {
           margin-bottom: 8px;
           list-style-type: disc;
+          padding-left: 20px;
         }
         ol {
-        margin-bottom: 8px;
+          margin-bottom: 8px;
           list-style-type: decimal;
+          padding-left: 20px;
+        }
+        li {
+          margin-left: 0;
+          margin-bottom: 8px;
         }
         p {
           margin-bottom: 8px;
