@@ -12,8 +12,8 @@ export const StepCompanyInfo = ({
     });
   };
   return (
-    <div className="flex flex-col gap-2 h-full">
-      <Label htmlFor="companyInfo">Company Information</Label>
+    <div className="flex flex-col gap-2 p-6 h-full">
+      <Label htmlFor="companyInfo">Enter Company Information</Label>
       <Textarea
         id="companyInfo"
         placeholder="Paste information from the company's about and careers page..."

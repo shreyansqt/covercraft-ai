@@ -12,8 +12,8 @@ export const StepJobDescription = ({
     });
   };
   return (
-    <div className="flex flex-col gap-2 h-full">
-      <Label htmlFor="jobDescription">Job Description</Label>
+    <div className="flex flex-col gap-2 p-6 h-full">
+      <Label htmlFor="jobDescription">Enter Job Description</Label>
       <Textarea
         id="jobDescription"
         placeholder="Paste the job description here..."

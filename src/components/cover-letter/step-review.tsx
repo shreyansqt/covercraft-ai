@@ -7,6 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { RichTextEditor } from "../rich-text-editor";
 import { Button } from "../ui/button";
+import { DownloadButton } from "./download-button";
 import type { StepComponentProps } from "./types";
 
 export const StepReview = ({ coverLetter, onUpdate }: StepComponentProps) => {
@@ -36,19 +37,23 @@ export const StepReview = ({ coverLetter, onUpdate }: StepComponentProps) => {
   };
 
   return (
-    <div className="flex flex-col gap-4 h-full">
+    <div className="flex flex-col gap-4 p-6 h-full">
       <div className="flex justify-between items-center">
         <Label htmlFor="coverLetter">Generated Cover Letter</Label>
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={generate}
-          disabled={isLoading}
-          className="flex items-center gap-2"
-        >
-          <RefreshCcw className="w-4 h-4" />
-          Regenerate
-        </Button>
+
+        <div className="flex items-center gap-2">
+          <DownloadButton coverLetter={coverLetter} />
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={generate}
+            disabled={isLoading}
+            className="flex items-center gap-2"
+          >
+            <RefreshCcw className="w-4 h-4" />
+            Regenerate
+          </Button>
+        </div>
       </div>
       {isLoading ? (
         <div>Loading...</div>

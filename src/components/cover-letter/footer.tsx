@@ -3,7 +3,6 @@ import type { Step } from "@/types";
 import { ArrowLeftIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
-import { DownloadButton } from "./download-button";
 
 export const CoverLetterFooter = ({
   id,
@@ -43,8 +42,6 @@ export const CoverLetterFooter = ({
           Next
         </Button>
       )}
-
-      {currentStep === "review" && <DownloadButton coverLetter={coverLetter} />}
     </footer>
   );
 };

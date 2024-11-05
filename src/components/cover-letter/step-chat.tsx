@@ -2,6 +2,7 @@
 import { useLLMSettings } from "@/hooks/use-llm-settings";
 import { PaperPlaneIcon } from "@radix-ui/react-icons";
 import { useChat, type Message } from "ai/react";
+import { useEffect, useRef } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { Button } from "../ui/button";
 import { ChatBubble, ChatBubbleMessage } from "../ui/chat/chat-bubble";
@@ -10,6 +11,7 @@ import { Textarea } from "../ui/textarea";
 import type { StepComponentProps } from "./types";
 
 const StepChat = ({ coverLetter, onUpdate }: StepComponentProps) => {
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
   const resume = useLocalStorage("resume", "");
   const { llmSettings } = useLLMSettings();
   const { messages, input, handleInputChange, handleSubmit } = useChat({
@@ -47,9 +49,15 @@ const StepChat = ({ coverLetter, onUpdate }: StepComponentProps) => {
     }));
   };
 
+  useEffect(() => {
+    if (scrollAreaRef.current) {
+      scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
+    }
+  }, [messages]);
+
   return (
     <div className="flex flex-col pb-4 h-full">
-      <ChatMessageList className="flex-grow">
+      <ChatMessageList className="flex-grow" ref={scrollAreaRef}>
         <ChatBubble variant="received">
           <ChatBubbleMessage variant="received">
             Hello! I am your cover letter assistant. Ask me anything about the

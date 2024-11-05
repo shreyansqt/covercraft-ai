@@ -3,10 +3,10 @@ import { useLLMSettings } from "@/hooks/use-llm-settings";
 import { summarizeJob } from "@/lib/summarizeJob";
 import type { Keyword } from "@/types";
 import { Label } from "@radix-ui/react-label";
-import { RefreshCcw } from "lucide-react";
+import { CheckIcon, Plus, RefreshCcw } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
+import { MyBadge } from "../my-badge";
 import { Button } from "../ui/button";
-import { Checkbox } from "../ui/checkbox";
 import type { StepComponentProps } from "./types";
 
 export const StepKeywords = ({ coverLetter, onUpdate }: StepComponentProps) => {
@@ -42,10 +42,23 @@ export const StepKeywords = ({ coverLetter, onUpdate }: StepComponentProps) => {
       keyword,
     ]);
   }
+
+  const toggleKeywordSelection = (keyword: Keyword) => {
+    const index = coverLetter.keywords.findIndex(
+      (k) => k.keyword === keyword.keyword
+    );
+    const newKeyword = { ...keyword, selected: !keyword.selected };
+    onUpdate((coverLetter) => {
+      const keywords = [...coverLetter.keywords];
+      keywords[index] = newKeyword;
+      return { keywords };
+    });
+  };
+
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex justify-between">
-        <Label>Keywords</Label>
+    <div className="p-6 h-full">
+      <div className="flex justify-between items-center mb-4">
+        <Label>Select Relevant Keywords</Label>
         <Button
           variant="outline"
           size="sm"
@@ -60,38 +73,31 @@ export const StepKeywords = ({ coverLetter, onUpdate }: StepComponentProps) => {
       {isLoading ? (
         <div>Loading...</div>
       ) : (
-        <div className="space-y-2">
-          {Array.from(keywordCategoryMap.entries()).map(
-            ([category, keywords], index) => (
-              <div key={index} className="flex flex-col items-start mt-4">
-                <h3 className="font-bold text-xl">{category}</h3>
+        Array.from(keywordCategoryMap.entries()).map(
+          ([category, keywords], index) => (
+            <div key={index} className="mb-4">
+              <h3 className="mb-2 text-sm">{category}</h3>
+              <div className="flex flex-wrap gap-2">
                 {keywords.map((keyword, index) => (
-                  <Label
+                  <MyBadge
                     key={index}
-                    className="inline-flex items-center gap-2 mt-2 cursor-pointer"
+                    variant={keyword.selected ? "default" : "outline"}
+                    onClick={() => {
+                      toggleKeywordSelection(keyword);
+                    }}
                   >
-                    <Checkbox
-                      id={keyword.keyword}
-                      checked={keyword.selected}
-                      onCheckedChange={(checked) => {
-                        if (typeof checked === "boolean") {
-                          onUpdate({
-                            keywords: coverLetter.keywords.map((k) =>
-                              k.keyword === keyword.keyword
-                                ? { ...k, selected: checked }
-                                : k
-                            ),
-                          });
-                        }
-                      }}
-                    />
-                    <span>{keyword.keyword}</span>
-                  </Label>
+                    {keyword.selected ? (
+                      <CheckIcon className="size-3.5" />
+                    ) : (
+                      <Plus className="size-3.5" />
+                    )}
+                    {keyword.keyword}
+                  </MyBadge>
                 ))}
               </div>
-            )
-          )}
-        </div>
+            </div>
+          )
+        )
       )}
     </div>
   );

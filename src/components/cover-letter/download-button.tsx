@@ -37,6 +37,7 @@ export const DownloadButton = ({
       onClick={handleGeneratePDF}
       className="ml-auto"
       disabled={isLoading}
+      size="sm"
     >
       {isLoading ? (
         <Loader2 className="animate-spin size-4" />
