@@ -21,7 +21,7 @@ export function Timeline({ steps, id }: { steps: Step[]; id: string }) {
         {steps.map((step, i) => (
           <Link
             key={i}
-            href={`/letter/${id}/${step}`}
+            href={`/cover-letter/${id}/${step}`}
             className="flex items-center gap-2"
           >
             <div

@@ -44,7 +44,7 @@ export const AppSidebar = () => {
   const handleCreateCoverLetter = () => {
     const id = createCoverLetter();
     const currentStep = "job-description";
-    router.push(`/letter/${id}/${currentStep}`);
+    router.push(`/cover-letter/${id}/${currentStep}`);
   };
 
   return (

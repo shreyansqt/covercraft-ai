@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /cover-letter/*/chat
+
+Sitemap: https://covercraftai.com/sitemap.xml 

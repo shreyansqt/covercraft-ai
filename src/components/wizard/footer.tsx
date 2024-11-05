@@ -18,14 +18,14 @@ export const CoverLetterFooter = ({
   const handleNext = () => {
     const nextStep = steps[currentStepIndex + 1];
     if (nextStep) {
-      router.push(`/letter/${id}/${nextStep}`);
+      router.push(`/cover-letter/${id}/${nextStep}`);
     }
   };
 
   const handlePrevious = () => {
     const previousStep = steps[currentStepIndex - 1];
     if (previousStep) {
-      router.push(`/letter/${id}/${previousStep}`);
+      router.push(`/cover-letter/${id}/${previousStep}`);
     }
   };
 

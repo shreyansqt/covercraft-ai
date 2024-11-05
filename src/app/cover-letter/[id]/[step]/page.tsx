@@ -7,7 +7,6 @@ import { StepReview } from "@/components/wizard/step-review";
 import { useCoverLetter } from "@/hooks/use-cover-letter";
 import type { Step } from "@/types";
 import { use, useEffect } from "react";
-
 const CoverLetterStepPage = (props: {
   params: Promise<{ id: string; step: Step }>;
 }) => {
