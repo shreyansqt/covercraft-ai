@@ -1,3 +1,5 @@
+import type { Message } from "ai/react";
+
 export type Keyword = {
   keyword: string;
   category: string;
@@ -13,9 +15,15 @@ export interface CoverLetter {
   keywords: Keyword[];
   content?: string;
   currentStep: Step;
+  chat?: Message[];
 }
 
-export type Step = "job-description" | "company-info" | "keywords" | "review";
+export type Step =
+  | "job-description"
+  | "company-info"
+  | "keywords"
+  | "review"
+  | "chat";
 
 export type LLMSettings = {
   apiKey?: string;

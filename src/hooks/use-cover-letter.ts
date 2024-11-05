@@ -15,8 +15,11 @@ export const useCoverLetter = (id: string) => {
     });
 
   const updateCoverLetter = useCallback(
-    (updates: Partial<CoverLetter>) => {
-      setCoverLetter((coverLetter) => ({ ...coverLetter, ...updates }));
+    (updates: Partial<CoverLetter> | ((coverLetter: CoverLetter) => void)) => {
+      setCoverLetter((coverLetter) => ({
+        ...coverLetter,
+        ...(typeof updates === "function" ? updates(coverLetter) : updates),
+      }));
     },
     [setCoverLetter]
   );

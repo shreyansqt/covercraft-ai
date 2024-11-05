@@ -86,7 +86,8 @@ export async function POST(request: Request) {
     return new NextResponse(pdf, {
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": "attachment; filename=document.pdf",
+        "Content-Disposition":
+          "attachment; filename=Jain_Shreyans_Cover_Letter.pdf",
       },
     });
   } catch (error) {

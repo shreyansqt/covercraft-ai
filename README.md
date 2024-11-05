@@ -18,36 +18,24 @@ A Next.js application that helps you generate personalized cover letters using A
 
 ```bash
 npm install
-# or
-yarn install
-# or
-pnpm install
-# or
-bun install
 ```
 
 3. Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
 4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-5. Paste your OpenAI API key into the field in the sidebar.
+5. Paste your OpenAI API key on Settings > LLM page.
 
 ## How It Works
 
 1. **Job Description**: Paste the job description you're applying for
 2. **Company Info**: Add information about the company from their website or careers page
 3. **Keywords**: AI extracts relevant keywords from the job description and company info
-4. **Review**: Generate and edit your cover letter, then export to PDF
+4. **Review**: Generate and edit your cover letter, then download as PDF
 
 ## Tech Stack
 

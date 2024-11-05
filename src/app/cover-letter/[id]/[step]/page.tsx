@@ -1,4 +1,5 @@
 "use client";
+import StepChat from "@/components/cover-letter/step-chat";
 import { StepCompanyInfo } from "@/components/cover-letter/step-company-info";
 import { StepJobDescription } from "@/components/cover-letter/step-job-description";
 import { StepKeywords } from "@/components/cover-letter/step-keywords";
@@ -25,6 +26,7 @@ const CoverLetterStepPage = (props: {
     "company-info": StepCompanyInfo,
     keywords: StepKeywords,
     review: StepReview,
+    chat: StepChat,
   };
 
   const StepComponent = stepComponents[params.step];

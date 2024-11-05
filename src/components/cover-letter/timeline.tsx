@@ -12,6 +12,7 @@ export function Timeline({ steps, id }: { steps: Step[]; id: string }) {
     "company-info": "Company Info",
     keywords: "Keywords",
     review: "Review & Export",
+    chat: "Chat",
   };
   return (
     <>

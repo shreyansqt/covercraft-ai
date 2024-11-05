@@ -17,6 +17,7 @@ export default function CoverLetterPage(props: {
     "company-info",
     "keywords",
     "review",
+    "chat",
   ];
 
   const { coverLetter } = useCoverLetter(params.id);
@@ -30,9 +31,7 @@ export default function CoverLetterPage(props: {
       <div className="flex flex-col flex-1 overflow-hidden">
         <CoverLetterHeader id={params.id} />
         <Timeline steps={steps} id={params.id} />
-        <main className="flex-grow flex-1 p-6 overflow-auto">
-          {props.children}
-        </main>
+        <main className="flex-grow flex-1 overflow-auto">{props.children}</main>
         <CoverLetterFooter id={params.id} steps={steps} />
       </div>
     </div>
