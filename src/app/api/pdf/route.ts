@@ -13,7 +13,7 @@ const getPuppeteer = async () => {
 
 export async function POST(request: Request) {
   try {
-    const { content } = await request.json();
+    const { content, fileName } = await request.json();
     const { puppeteer } = await getPuppeteer();
 
     // Add Tailwind CSS and Avenir font styles to the content
@@ -86,8 +86,7 @@ export async function POST(request: Request) {
     return new NextResponse(pdf, {
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition":
-          "attachment; filename=Jain_Shreyans_Cover_Letter.pdf",
+        "Content-Disposition": `attachment; filename=${fileName}.pdf`,
       },
     });
   } catch (error) {

@@ -18,7 +18,7 @@ export const DownloadForm = ({ coverLetter }: { coverLetter: CoverLetter }) => {
     setIsLoading(true);
     const response = await fetch("/api/pdf", {
       method: "POST",
-      body: JSON.stringify({ content: coverLetter.content }),
+      body: JSON.stringify({ content: coverLetter.content, fileName }),
     });
     // console.log(await response.json());
     const blob = await response.blob();
@@ -27,7 +27,7 @@ export const DownloadForm = ({ coverLetter }: { coverLetter: CoverLetter }) => {
     // Create a temporary link and click it to download the file
     const link = document.createElement("a");
     link.href = url;
-    link.download = "generated.pdf";
+    link.download = `${fileName}.pdf`;
     document.body.appendChild(link);
     link.click();
     link.remove();
