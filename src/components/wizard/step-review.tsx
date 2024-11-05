@@ -7,7 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { RichTextEditor } from "../rich-text-editor";
 import { Button } from "../ui/button";
-import { DownloadButton } from "./download-button";
+import { DownloadForm } from "./download-form";
 import type { StepComponentProps } from "./types";
 
 export const StepReview = ({ coverLetter, onUpdate }: StepComponentProps) => {
@@ -42,7 +42,7 @@ export const StepReview = ({ coverLetter, onUpdate }: StepComponentProps) => {
         <Label htmlFor="coverLetter">Generated Cover Letter</Label>
 
         <div className="flex items-center gap-2">
-          <DownloadButton coverLetter={coverLetter} />
+          <DownloadForm coverLetter={coverLetter} />
           <Button
             variant="outline"
             size="sm"

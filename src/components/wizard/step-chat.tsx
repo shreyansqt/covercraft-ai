@@ -15,6 +15,7 @@ const StepChat = ({ coverLetter, onUpdate }: StepComponentProps) => {
   const resume = useLocalStorage("resume", "");
   const { llmSettings } = useLLMSettings();
   const { messages, input, handleInputChange, handleSubmit } = useChat({
+    api: "/covercraft-ai/api/chat",
     id: coverLetter.id,
     initialMessages: [...(coverLetter.chat || [])],
     body: {

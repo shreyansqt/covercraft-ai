@@ -1,6 +1,12 @@
-# Cover Letter Generator
+# CoverCraft AI
 
-A Next.js application that helps you generate personalized cover letters using AI. Built with Next.js 15, TypeScript, and Tailwind CSS.
+A web application that helps you generate personalized cover letters using AI. Built with Next.js 15, TypeScript, and Tailwind CSS.
+
+## Getting Started
+
+Visit [shreyans.co/cover-letter](https://shreyans.co/cover-letter) to start using CoverCraft AI.
+
+**Note:** You'll need your own [OpenAI API key](https://platform.openai.com/api-keys) to use this application.
 
 ## Features
 
@@ -10,25 +16,6 @@ A Next.js application that helps you generate personalized cover letters using A
 - 💾 Local storage persistence for managing multiple cover letters
 - 🎨 Clean, modern UI with dark mode support
 - 📱 Responsive design with mobile-friendly sidebar
-
-## Getting Started
-
-1. Clone the repository
-2. Install dependencies:
-
-```bash
-npm install
-```
-
-3. Run the development server:
-
-```bash
-npm run dev
-```
-
-4. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-5. Paste your OpenAI API key on Settings > LLM page.
 
 ## How It Works
 

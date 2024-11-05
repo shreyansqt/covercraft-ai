@@ -21,7 +21,7 @@ export async function POST(request: Request) {
       <style>
         @font-face {
           font-family: 'Avenir';
-          src: url('/fonts/AvenirNextLTPro-Regular.otf') format('woff2');
+          src: url('${process.env.NEXT_PUBLIC_URL}/fonts/AvenirNextLTPro-Regular.otf') format('woff2');
         }
         body {
           font-family: 'Avenir', sans-serif;

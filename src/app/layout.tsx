@@ -1,7 +1,9 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+
 import "./globals.css";
 
 const avenirNext = localFont({
@@ -34,6 +36,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className={`${avenirNext.variable} antialiased`}>
+        <Analytics />
         <SidebarProvider>
           <AppSidebar />
           <div className="flex-1">{props.children}</div>

@@ -8,7 +8,7 @@ import { SidebarMenuButton, SidebarMenuItem } from "./ui/sidebar";
 export const CoverLetterMenuItem = ({ id }: { id: string }) => {
   const params = useParams();
   const { coverLetter, deleteCoverLetter } = useCoverLetter(id);
-  const href = `/cover-letter/${id}/${coverLetter.currentStep}`;
+  const href = `/letter/${id}/${coverLetter.currentStep}`;
   return (
     <SidebarMenuItem key={id} className="relative group/item">
       <SidebarMenuButton

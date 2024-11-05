@@ -12,7 +12,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useCoverLetters } from "@/hooks/use-cover-letters";
-import { ChevronDown, FileText, PlusCircle, Sparkles } from "lucide-react";
+import { ChevronDown, FilePlus2, FileText, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { CoverLetterMenuItem } from "./cover-letter-menu-item";
@@ -44,14 +44,19 @@ export const AppSidebar = () => {
   const handleCreateCoverLetter = () => {
     const id = createCoverLetter();
     const currentStep = "job-description";
-    router.push(`/cover-letter/${id}/${currentStep}`);
+    router.push(`/letter/${id}/${currentStep}`);
   };
 
   return (
     <Sidebar className="border-r">
       <SidebarHeader>
+        <div className="flex flex-col gap-2">
+          <Link href="/">
+            <h1 className="font-bold">CoverCraft AI</h1>
+          </Link>
+        </div>
         <Button onClick={handleCreateCoverLetter} className="w-full">
-          <PlusCircle className="mr-2 w-4 h-4" /> New Cover Letter
+          <FilePlus2 className="mr-2 w-4 h-4" /> New Cover Letter
         </Button>
       </SidebarHeader>
       <SidebarContent>

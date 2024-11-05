@@ -1,9 +1,9 @@
 "use client";
-import StepChat from "@/components/cover-letter/step-chat";
-import { StepCompanyInfo } from "@/components/cover-letter/step-company-info";
-import { StepJobDescription } from "@/components/cover-letter/step-job-description";
-import { StepKeywords } from "@/components/cover-letter/step-keywords";
-import { StepReview } from "@/components/cover-letter/step-review";
+import StepChat from "@/components/wizard/step-chat";
+import { StepCompanyInfo } from "@/components/wizard/step-company-info";
+import { StepJobDescription } from "@/components/wizard/step-job-description";
+import { StepKeywords } from "@/components/wizard/step-keywords";
+import { StepReview } from "@/components/wizard/step-review";
 import { useCoverLetter } from "@/hooks/use-cover-letter";
 import type { Step } from "@/types";
 import { use, useEffect } from "react";

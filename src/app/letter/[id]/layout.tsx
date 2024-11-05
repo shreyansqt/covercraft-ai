@@ -1,8 +1,8 @@
 "use client";
 
-import { CoverLetterFooter } from "@/components/cover-letter/footer";
-import { CoverLetterHeader } from "@/components/cover-letter/header";
-import { Timeline } from "@/components/cover-letter/timeline";
+import { CoverLetterFooter } from "@/components/wizard/footer";
+import { CoverLetterHeader } from "@/components/wizard/header";
+import { Timeline } from "@/components/wizard/timeline";
 import { useCoverLetter } from "@/hooks/use-cover-letter";
 import type { Step } from "@/types";
 import { use } from "react";
