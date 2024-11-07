@@ -10,7 +10,7 @@ export default function LLMSettingsPage() {
   return (
     <div className="flex flex-col h-full">
       <Header>
-        <h1 className="font-bold text-2xl">LLM Settings</h1>
+        <h1 className="font-semibold text-2xl">LLM Settings</h1>
       </Header>
 
       <div className="flex flex-col flex-1 p-6">

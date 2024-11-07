@@ -1,8 +1,9 @@
 "use client";
 import { useLLMSettings } from "@/hooks/use-llm-settings";
 import { generateCoverLetter } from "@/lib/generateCoverLetter";
+import { cn } from "@/lib/utils";
+import { ArrowsClockwise } from "@phosphor-icons/react";
 import { Label } from "@radix-ui/react-label";
-import { RefreshCcw } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { RichTextEditor } from "../rich-text-editor";
@@ -50,8 +51,11 @@ export const StepReview = ({ coverLetter, onUpdate }: StepComponentProps) => {
             disabled={isLoading}
             className="flex items-center gap-2"
           >
-            <RefreshCcw className="w-4 h-4" />
-            Regenerate
+            <ArrowsClockwise
+              className={cn("w-4 h-4", isLoading && "animate-spin")}
+              weight="duotone"
+            />
+            {isLoading ? "Regenerating..." : "Regenerate"}
           </Button>
         </div>
       </div>

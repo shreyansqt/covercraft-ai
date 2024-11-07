@@ -1,3 +1,5 @@
+"use client";
+
 import { useCoverLetter } from "@/hooks/use-cover-letter";
 import { Header } from "../header";
 
@@ -6,7 +8,7 @@ export const CoverLetterHeader = ({ id }: { id: string }) => {
 
   return (
     <Header>
-      <h1 className="font-bold text-2xl">
+      <h1 className="font-semibold text-2xl">
         {coverLetter.roleName || "Unknown role"}
       </h1>
       <h2 className="text-muted-foreground text-sm">

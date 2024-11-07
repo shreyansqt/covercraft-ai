@@ -9,14 +9,15 @@ export const useCoverLetters = () => {
   );
 
   const createCoverLetter = () => {
-    const newCoverLetterId = Date.now().toString();
+    const newCoverLetterId = crypto.randomUUID();
     setCoverLetterIds([newCoverLetterId, ...coverLetterIds]);
     return newCoverLetterId;
   };
 
-  const deleteCoverLetterById = (id: string) => {
-    setCoverLetterIds(coverLetterIds.filter((clId) => clId !== id));
-    localStorage.removeItem(`cover-letter-${id}`);
+  const deleteCoverLetterById = (id: string): string[] => {
+    const newCoverLetterIds = coverLetterIds.filter((clId) => clId !== id);
+    setCoverLetterIds(newCoverLetterIds);
+    return newCoverLetterIds;
   };
 
   return {

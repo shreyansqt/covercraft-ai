@@ -1,6 +1,6 @@
 import type { CoverLetter } from "@/types";
+import { Download, SpinnerGap } from "@phosphor-icons/react";
 import { Label } from "@radix-ui/react-label";
-import { DownloadIcon, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { Button } from "../ui/button";
@@ -52,11 +52,11 @@ export const DownloadForm = ({ coverLetter }: { coverLetter: CoverLetter }) => {
       />
       <Button type="submit" className="ml-auto" disabled={isLoading} size="sm">
         {isLoading ? (
-          <Loader2 className="animate-spin size-4" />
+          <SpinnerGap className="animate-spin size-4" />
         ) : (
-          <DownloadIcon className="size-4" />
+          <Download className="size-4" weight="duotone" />
         )}
-        {isLoading ? "Generating..." : "Download PDF"}
+        {isLoading ? "Generating PDF..." : "Download PDF"}
       </Button>
     </form>
   );

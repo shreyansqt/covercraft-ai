@@ -1,74 +1,118 @@
 "use client";
-import { Separator } from "@/components/ui/separator";
-import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
+import { Logo } from "@/components/logo";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import {
+  ChatTeardropDots,
+  EyeClosed,
+  FilePdf,
+  GearSix,
+  GithubLogo,
+  MagicWand,
+  PaintBrush,
+} from "@phosphor-icons/react/dist/ssr";
+import Link from "next/link";
 
-export default function Home() {
-  const { open, isMobile } = useSidebar();
+const features = [
+  {
+    icon: PaintBrush,
+    title: "Custom Cover Letter Generation",
+    description:
+      "Harness the power of LLMs to generate cover letters tailored to the job requirements, your resume, and company values.",
+  },
+  {
+    icon: MagicWand,
+    title: "Smart Keyword Matching",
+    description:
+      "See a list of relevant keywords with match scores. Manually select the ones you want to emphasize in your cover letter.",
+  },
+  {
+    icon: FilePdf,
+    title: "Instant Editing & PDF Export",
+    description:
+      "Make edits directly after generation, and skip the copy-paste—download a polished PDF in one click.",
+  },
+  {
+    icon: ChatTeardropDots,
+    title: "Answer Additional Questions",
+    description:
+      "Is there a tricky question on the application? Use the built-in chat to get LLM-generated answers on the spot.",
+  },
+  {
+    icon: GearSix,
+    title: "Fully Customizable Prompts",
+    description:
+      "Adjust prompts as you like for total control over the content and tone of your cover letter.",
+  },
+  {
+    icon: EyeClosed,
+    title: "Private & Secure",
+    description:
+      "All data is stored locally in your browser—no external servers, just you and your secure setup.",
+  },
+];
+
+export default function LandingPage() {
   return (
-    <div className="flex flex-col justify-center items-center w-full h-screen">
-      {(!open || isMobile) && (
-        <SidebarTrigger className="top-4 left-4 absolute" />
-      )}
-      <div className="space-y-6">
-        <h2 className="mb-4 font-bold text-2xl">Get Started</h2>
-        <ol className="space-y-4 ml-4 list-decimal">
-          <li className="text-muted-foreground">
-            Go to Settings &gt; LLM and add your{" "}
+    <>
+      <header className="top-0 z-10 sticky bg-background border-b">
+        <div className="flex justify-between items-center mx-auto py-4 container">
+          <div className="flex items-center gap-8 align-baseline">
+            <Logo href="/" />
+          </div>
+          <div className="flex items-center gap-8">
             <a
-              href="https://platform.openai.com/api-keys"
+              href="https://github.com/shreyansqt/covercraft-ai"
               target="_blank"
               rel="noopener noreferrer"
+              className="flex items-center gap-2 text-muted-foreground hover:text-secondary"
             >
-              OpenAI API Key
+              <GithubLogo className="size-6" weight="duotone" />
+              <span>GitHub</span>
             </a>
-          </li>
-          <li className="text-muted-foreground">
-            Go to Settings &gt; Resume and paste text from your resume
-          </li>
-          <li className="text-muted-foreground">
-            Click &quot;New Cover Letter&quot; and get started!
-          </li>
-        </ol>
-        <Separator />
-        <div className="space-y-2 mt-12 text-muted-foreground text-sm">
-          <p className="flex items-center gap-2">
-            <span>🔒</span>
-            <span>
-              Private & Secure: All data is stored locally in your browser. No
-              server involved.
-            </span>
+            <Button size="sm" asChild className="shadow-none">
+              <Link href="/app">Open App</Link>
+            </Button>
+          </div>
+        </div>
+      </header>
+      <div className="flex flex-col mx-auto container">
+        {/* Hero Section */}
+        <div className="flex flex-col gap-6 mx-auto py-24 max-w-3xl text-center">
+          <h1 className="font-semibold text-4xl md:text-5xl leading-tight">
+            Craft the Perfect Cover Letter, Completely Free.
+          </h1>
+          <p className="mx-auto max-w-2xl text-muted-foreground text-xl">
+            Just bring your OpenAI API Key. Generate, customize, and download
+            your cover letter in minutes—all securely in your browser, no cost
+            involved.
           </p>
-          <p className="flex items-center gap-2">
-            <span>👀</span>
-            <span>
-              Open Source: View or contribute on{" "}
-              <a
-                href="https://github.com/shreyansqt/covercraft-ai"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary hover:underline"
-              >
-                GitHub
-              </a>
-            </span>
-          </p>
-          <p className="flex items-center gap-2">
-            <span>👋</span>
-            <span>
-              Built by{" "}
-              <a
-                href="https://shreyans.co"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary hover:underline"
-              >
-                Shreyans
-              </a>{" "}
-              for personal use & open source
-            </span>
-          </p>
+          <Button size="lg" asChild className="shadow-none mx-auto">
+            <Link href="/app">Create Your First Cover Letter</Link>
+          </Button>
+        </div>
+
+        {/* Features Grid */}
+        <div className="gap-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mb-12">
+          {features.map((feature, index) => (
+            <Card
+              key={index}
+              className="shadow-none p-6 border-none rounded-3xl"
+            >
+              <div className="flex items-center gap-3 mb-3">
+                <feature.icon
+                  className="w-6 h-6 text-secondary"
+                  weight="duotone"
+                />
+                <h3 className="font-semibold">{feature.title}</h3>
+              </div>
+              <p className="text-muted-foreground text-sm">
+                {feature.description}
+              </p>
+            </Card>
+          ))}
         </div>
       </div>
-    </div>
+    </>
   );
 }

@@ -1,30 +1,12 @@
-import { AppSidebar } from "@/components/app-sidebar";
-import { SidebarProvider } from "@/components/ui/sidebar";
 import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Outfit } from "next/font/google";
 
 import "./globals.css";
 
-const avenirNext = localFont({
-  src: [
-    {
-      path: "./fonts/AvenirNextLTPro-Regular.otf",
-      weight: "400",
-      style: "normal",
-    },
-    {
-      path: "./fonts/AvenirNextLTPro-It.otf",
-      weight: "400",
-      style: "italic",
-    },
-    {
-      path: "./fonts/AvenirNextLTPro-Bold.otf",
-      weight: "700",
-      style: "bold",
-    },
-  ],
-  variable: "--font-avenir-next",
+const outfit = Outfit({
+  subsets: ["latin"],
+  variable: "--font-outfit",
 });
 
 export const metadata: Metadata = {
@@ -76,12 +58,9 @@ export const metadata: Metadata = {
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${avenirNext.variable} antialiased relative`}>
+      <body className={`${outfit.variable} antialiased relative`}>
         <Analytics />
-        <SidebarProvider>
-          <AppSidebar />
-          <div className="flex-1">{props.children}</div>
-        </SidebarProvider>
+        {props.children}
       </body>
     </html>
   );

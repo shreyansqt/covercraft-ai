@@ -24,9 +24,9 @@ export const useCoverLetter = (id: string) => {
     [setCoverLetter]
   );
 
-  const deleteCoverLetter = () => {
+  const deleteCoverLetter = (): string[] => {
     removeCoverLetter();
-    deleteCoverLetterById(id);
+    return deleteCoverLetterById(id);
   };
 
   return {

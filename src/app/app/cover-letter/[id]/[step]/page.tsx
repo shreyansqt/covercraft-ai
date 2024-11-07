@@ -11,14 +11,13 @@ const CoverLetterStepPage = (props: {
   params: Promise<{ id: string; step: Step }>;
 }) => {
   const params = use(props.params);
-
   const { coverLetter, updateCoverLetter } = useCoverLetter(params.id);
 
   useEffect(() => {
     updateCoverLetter({
       currentStep: params.step,
     });
-  }, [params.step, updateCoverLetter]);
+  }, [params.step, params.id]);
 
   const stepComponents = {
     "job-description": StepJobDescription,

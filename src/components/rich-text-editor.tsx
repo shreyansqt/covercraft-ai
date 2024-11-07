@@ -1,10 +1,15 @@
 "use client";
 import { Separator } from "@/components/ui/separator";
 import { Toggle } from "@/components/ui/toggle";
+import {
+  ListBullets,
+  ListNumbers,
+  TextB,
+  TextItalic,
+} from "@phosphor-icons/react";
 import Link from "@tiptap/extension-link";
 import { EditorContent, useEditor, type Editor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
-import { Bold, Italic, List, ListOrdered } from "lucide-react";
 import { EditorLinkToggle } from "./EditorLinkToggle";
 
 export const RichTextEditor = ({
@@ -72,7 +77,7 @@ const RichTextEditorToolbar = ({ editor }: { editor: Editor }) => {
         onPressedChange={() => editor.chain().focus().toggleBold().run()}
         aria-label="Bold"
       >
-        <Bold className="w-4 h-4" />
+        <TextB className="size-4" weight="duotone" />
       </Toggle>
       <Toggle
         size="sm"
@@ -80,7 +85,7 @@ const RichTextEditorToolbar = ({ editor }: { editor: Editor }) => {
         onPressedChange={() => editor.chain().focus().toggleItalic().run()}
         aria-label="Italic"
       >
-        <Italic className="size-4" />
+        <TextItalic className="size-4" weight="duotone" />
       </Toggle>
       <Separator orientation="vertical" className="w-[1px] h-8" />
       <Toggle
@@ -89,7 +94,7 @@ const RichTextEditorToolbar = ({ editor }: { editor: Editor }) => {
         onPressedChange={() => editor.chain().focus().toggleBulletList().run()}
         aria-label="Bullet List"
       >
-        <List className="size-4" />
+        <ListBullets className="size-4" weight="duotone" />
       </Toggle>
       <Toggle
         size="sm"
@@ -97,7 +102,7 @@ const RichTextEditorToolbar = ({ editor }: { editor: Editor }) => {
         onPressedChange={() => editor.chain().focus().toggleOrderedList().run()}
         aria-label="Ordered List"
       >
-        <ListOrdered className="size-4" />
+        <ListNumbers className="size-4" weight="duotone" />
       </Toggle>
       <EditorLinkToggle editor={editor} />
     </div>

@@ -1,17 +1,13 @@
-"use client";
-
 import { CoverLetterFooter } from "@/components/wizard/footer";
 import { CoverLetterHeader } from "@/components/wizard/header";
 import { Timeline } from "@/components/wizard/timeline";
-import { useCoverLetter } from "@/hooks/use-cover-letter";
 import type { Step } from "@/types";
-import { use } from "react";
 
-export default function CoverLetterPage(props: {
+export default async function CoverLetterPage(props: {
   params: Promise<{ id: string }>;
   children: React.ReactNode;
 }) {
-  const params = use(props.params);
+  const params = await props.params;
   const steps: Step[] = [
     "job-description",
     "company-info",
@@ -19,12 +15,6 @@ export default function CoverLetterPage(props: {
     "review",
     "chat",
   ];
-
-  const { coverLetter } = useCoverLetter(params.id);
-
-  if (!coverLetter) {
-    return <h1>No cover letter found for id &quot;{params.id}&quot;</h1>;
-  }
 
   return (
     <div className="flex w-full h-screen">

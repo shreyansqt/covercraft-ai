@@ -1,8 +1,8 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { FloppyDisk, Link, Trash } from "@phosphor-icons/react";
 import type { Editor } from "@tiptap/react";
-import { LinkIcon, SaveIcon, Trash2Icon } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
@@ -36,7 +36,7 @@ export const EditorLinkToggle = ({ editor }: { editor: Editor }) => {
           aria-label="Link"
           className={cn(editor.isActive("link") && "bg-accent")}
         >
-          <LinkIcon className="size-4" />
+          <Link className="size-4" weight="duotone" />
         </Toggle>
       </PopoverTrigger>
       <PopoverContent side="top" align="center">
@@ -53,7 +53,7 @@ export const EditorLinkToggle = ({ editor }: { editor: Editor }) => {
             name="url"
           />
           <Button type="submit" variant="ghost" className="size-8">
-            <SaveIcon className="size-4" />
+            <FloppyDisk className="size-4" weight="duotone" />
           </Button>
 
           <Button
@@ -62,7 +62,7 @@ export const EditorLinkToggle = ({ editor }: { editor: Editor }) => {
             className="size-8"
             disabled={!editor.isActive("link")}
           >
-            <Trash2Icon className="size-4" />
+            <Trash className="size-4" weight="duotone" />
           </Button>
         </form>
       </PopoverContent>

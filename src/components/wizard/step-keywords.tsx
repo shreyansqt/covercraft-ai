@@ -1,9 +1,10 @@
 "use client";
 import { useLLMSettings } from "@/hooks/use-llm-settings";
 import { summarizeJob } from "@/lib/summarizeJob";
+import { cn } from "@/lib/utils";
 import type { Keyword } from "@/types";
+import { ArrowsClockwise, Check, Plus } from "@phosphor-icons/react";
 import { Label } from "@radix-ui/react-label";
-import { CheckIcon, Plus, RefreshCcw } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { MyBadge } from "../my-badge";
 import { Button } from "../ui/button";
@@ -66,8 +67,11 @@ export const StepKeywords = ({ coverLetter, onUpdate }: StepComponentProps) => {
           disabled={isLoading}
           className="flex items-center gap-2"
         >
-          <RefreshCcw className="w-4 h-4" />
-          Regenerate
+          <ArrowsClockwise
+            className={cn("w-4 h-4", isLoading && "animate-spin")}
+            weight="duotone"
+          />
+          {isLoading ? "Regenerating..." : "Regenerate"}
         </Button>
       </div>
       {isLoading ? (
@@ -87,7 +91,7 @@ export const StepKeywords = ({ coverLetter, onUpdate }: StepComponentProps) => {
                     }}
                   >
                     {keyword.selected ? (
-                      <CheckIcon className="size-3.5" />
+                      <Check className="size-3.5" />
                     ) : (
                       <Plus className="size-3.5" />
                     )}

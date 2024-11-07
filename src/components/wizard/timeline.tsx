@@ -1,3 +1,4 @@
+"use client";
 import { useCoverLetter } from "@/hooks/use-cover-letter";
 import { cn } from "@/lib/utils";
 import type { Step } from "@/types";
@@ -21,7 +22,7 @@ export function Timeline({ steps, id }: { steps: Step[]; id: string }) {
         {steps.map((step, i) => (
           <Link
             key={i}
-            href={`/cover-letter/${id}/${step}`}
+            href={`/app/cover-letter/${id}/${step}`}
             className="flex items-center gap-2"
           >
             <div

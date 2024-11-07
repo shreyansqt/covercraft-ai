@@ -13,10 +13,17 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { useCoverLetters } from "@/hooks/use-cover-letters";
-import { ChevronDown, FilePlus2, FileText, Sparkles } from "lucide-react";
+import {
+  CaretCircleDown,
+  FilePlus,
+  House,
+  Sparkle,
+  UserSquare,
+} from "@phosphor-icons/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { CoverLetterMenuItem } from "./cover-letter-menu-item";
+import { Logo } from "./logo";
 import { Button } from "./ui/button";
 import {
   Collapsible,
@@ -27,13 +34,13 @@ import {
 const settingsMenuItems = [
   {
     label: "Resume",
-    href: "/settings/resume",
-    icon: FileText,
+    href: "/app/settings/resume",
+    icon: UserSquare,
   },
   {
     label: "LLM",
-    href: "/settings/llm",
-    icon: Sparkles,
+    href: "/app/settings/llm",
+    icon: Sparkle,
   },
 ];
 
@@ -44,27 +51,25 @@ export const AppSidebar = () => {
 
   const handleCreateCoverLetter = () => {
     const id = createCoverLetter();
-    const currentStep = "job-description";
-    router.push(`/cover-letter/${id}/${currentStep}`);
+    router.push(`/app/cover-letter/${id}/job-description`);
   };
 
   return (
     <Sidebar className="border-r">
       <SidebarHeader>
         <div className="flex justify-between items-center">
-          <Link href="/" className="font-bold">
-            CoverCraft AI
-          </Link>
+          <Logo href="/app" size="sm" />
           <SidebarTrigger />
         </div>
         <Button onClick={handleCreateCoverLetter} className="w-full">
-          <FilePlus2 className="mr-2 w-4 h-4" /> New Cover Letter
+          <FilePlus className="mr-2 w-4 h-4" weight="duotone" /> New Cover
+          Letter
         </Button>
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
           {coverLetterIds.map((id) => (
-            <CoverLetterMenuItem id={id} key={id} />
+            <CoverLetterMenuItem key={id} id={id} />
           ))}
         </SidebarMenu>
       </SidebarContent>
@@ -72,9 +77,12 @@ export const AppSidebar = () => {
         <Collapsible defaultOpen className="group/collapsible">
           <SidebarGroup>
             <SidebarGroupLabel asChild>
-              <CollapsibleTrigger>
+              <CollapsibleTrigger className="text-muted-foreground">
                 Settings
-                <ChevronDown className="group-data-[state=open]/collapsible:rotate-180 ml-auto transition-transform" />
+                <CaretCircleDown
+                  className="group-data-[state=open]/collapsible:rotate-180 ml-auto text-muted-foreground transition-transform"
+                  weight="bold"
+                />
               </CollapsibleTrigger>
             </SidebarGroupLabel>
             <CollapsibleContent>
@@ -84,12 +92,20 @@ export const AppSidebar = () => {
                     <SidebarMenuItem key={href}>
                       <SidebarMenuButton isActive={pathname === href} asChild>
                         <Link href={href} className="flex items-center gap-2">
-                          <Icon className="size-4" />
+                          <Icon className="size-4" weight="duotone" />
                           <span>{label}</span>
                         </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   ))}
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild>
+                      <Link href="/" className="flex items-center gap-2">
+                        <House className="size-4" weight="duotone" />
+                        <span>Return to Home Page</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
                 </SidebarMenu>
               </SidebarGroupContent>
             </CollapsibleContent>
