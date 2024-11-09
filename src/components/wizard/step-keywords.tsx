@@ -1,4 +1,5 @@
 "use client";
+import { useCoverLetter } from "@/hooks/use-cover-letter";
 import { useLLMSettings } from "@/hooks/use-llm-settings";
 import { summarizeJob } from "@/lib/summarizeJob";
 import { cn } from "@/lib/utils";
@@ -8,9 +9,9 @@ import { Label } from "@radix-ui/react-label";
 import { useCallback, useEffect, useState } from "react";
 import { MyBadge } from "../my-badge";
 import { Button } from "../ui/button";
-import type { StepComponentProps } from "./types";
 
-export const StepKeywords = ({ coverLetter, onUpdate }: StepComponentProps) => {
+export const StepKeywords = ({ id }: { id: string }) => {
+  const { coverLetter, updateCoverLetter } = useCoverLetter(id);
   const [isLoading, setIsLoading] = useState(false);
   const { llmSettings } = useLLMSettings();
 
@@ -22,13 +23,13 @@ export const StepKeywords = ({ coverLetter, onUpdate }: StepComponentProps) => {
       coverLetter,
       llmSettings
     );
-    onUpdate({
+    updateCoverLetter({
       roleName,
       companyName,
       keywords,
     });
     setIsLoading(false);
-  }, [coverLetter, llmSettings, onUpdate]);
+  }, [coverLetter, llmSettings, updateCoverLetter]);
 
   useEffect(() => {
     if (coverLetter.keywords.length === 0) {
@@ -49,7 +50,7 @@ export const StepKeywords = ({ coverLetter, onUpdate }: StepComponentProps) => {
       (k) => k.keyword === keyword.keyword
     );
     const newKeyword = { ...keyword, selected: !keyword.selected };
-    onUpdate((coverLetter) => {
+    updateCoverLetter((coverLetter) => {
       const keywords = [...coverLetter.keywords];
       keywords[index] = newKeyword;
       return { keywords };

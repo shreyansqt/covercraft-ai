@@ -1,29 +1,30 @@
 "use client";
+import { useCoverLetter } from "@/hooks/use-cover-letter";
 import { useLLMSettings } from "@/hooks/use-llm-settings";
+import { useResume } from "@/hooks/use-resume";
 import { generateCoverLetter } from "@/lib/generateCoverLetter";
 import { cn } from "@/lib/utils";
 import { ArrowsClockwise } from "@phosphor-icons/react";
 import { Label } from "@radix-ui/react-label";
 import { useCallback, useEffect, useState } from "react";
-import { useLocalStorage } from "usehooks-ts";
 import { RichTextEditor } from "../rich-text-editor";
 import { Button } from "../ui/button";
 import { DownloadForm } from "./download-form";
-import type { StepComponentProps } from "./types";
 
-export const StepReview = ({ coverLetter, onUpdate }: StepComponentProps) => {
-  const [resume] = useLocalStorage("resume", "");
+export const StepReview = ({ id }: { id: string }) => {
+  const { coverLetter, updateCoverLetter } = useCoverLetter(id);
+  const { resume } = useResume();
   const { llmSettings } = useLLMSettings();
   const [isLoading, setIsLoading] = useState(false);
 
   const generate = useCallback(async () => {
     setIsLoading(true);
     const content = await generateCoverLetter(coverLetter, resume, llmSettings);
-    onUpdate({
+    updateCoverLetter({
       content,
     });
     setIsLoading(false);
-  }, [coverLetter, resume, llmSettings, onUpdate]);
+  }, [coverLetter, resume, llmSettings, updateCoverLetter]);
 
   useEffect(() => {
     if (!coverLetter.content) {

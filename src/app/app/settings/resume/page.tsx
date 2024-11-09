@@ -2,14 +2,14 @@
 import { Header } from "@/components/header";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { useLocalStorage } from "usehooks-ts";
+import { useResume } from "@/hooks/use-resume";
 
 export default function ResumePage() {
-  const [resumeContent, setResumeContent] = useLocalStorage("resume", "");
+  const { resume, setResume } = useResume();
 
   const handleResumeChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newContent = e.target.value;
-    setResumeContent(newContent);
+    setResume(newContent);
   };
 
   return (
@@ -24,7 +24,7 @@ export default function ResumePage() {
         <Textarea
           id="resume"
           className="flex-1 resize-none"
-          value={resumeContent}
+          value={resume}
           onChange={handleResumeChange}
           placeholder="Paste your resume content here..."
         />

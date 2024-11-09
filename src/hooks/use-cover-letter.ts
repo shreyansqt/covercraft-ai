@@ -4,6 +4,7 @@ import { useCallback } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { CoverLetter } from "../types";
 import { useCoverLetters } from "./use-cover-letters";
+import { Step } from "./use-step";
 
 export const useCoverLetter = (id: string) => {
   const { deleteCoverLetterById } = useCoverLetters();
@@ -11,7 +12,7 @@ export const useCoverLetter = (id: string) => {
     useLocalStorage<CoverLetter>(`cover-letter-${id}`, {
       id,
       keywords: [],
-      currentStep: "job-description",
+      currentStep: Step.JobDescription,
     });
 
   const updateCoverLetter = useCallback(

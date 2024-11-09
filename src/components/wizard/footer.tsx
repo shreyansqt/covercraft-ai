@@ -1,48 +1,42 @@
 "use client";
 
 import { useCoverLetter } from "@/hooks/use-cover-letter";
-import type { Step } from "@/types";
+import { useStep } from "@/hooks/use-step";
 import { ArrowLeft } from "@phosphor-icons/react";
-import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 
-export const CoverLetterFooter = ({
-  id,
-  steps,
-}: {
-  id: string;
-  steps: Step[];
-}) => {
-  const router = useRouter();
+export const CoverLetterFooter = ({ id }: { id: string }) => {
   const { coverLetter } = useCoverLetter(id);
-  const { currentStep } = coverLetter;
-  const currentStepIndex = steps.indexOf(currentStep);
-  const handleNext = () => {
-    const nextStep = steps[currentStepIndex + 1];
-    if (nextStep) {
-      router.push(`/app/cover-letter/${id}/${nextStep}`);
-    }
-  };
+  const {
+    steps,
+    getStepIndex,
+    goToPreviousStep,
+    goToNextStep,
+    isNextStepLoading,
+  } = useStep();
 
-  const handlePrevious = () => {
-    const previousStep = steps[currentStepIndex - 1];
-    if (previousStep) {
-      router.push(`/app/cover-letter/${id}/${previousStep}`);
-    }
-  };
+  const currentStepIndex = getStepIndex(coverLetter.currentStep);
 
   return (
     <footer className="flex px-6 py-4 border-t">
       {currentStepIndex > 0 && (
-        <Button variant="ghost" onClick={handlePrevious} size="icon">
+        <Button
+          variant="ghost"
+          onClick={() => goToPreviousStep(id, coverLetter.currentStep)}
+          size="icon"
+        >
           <ArrowLeft className="w-4 h-4" weight="duotone" />
           <span className="sr-only">Previous</span>
         </Button>
       )}
 
       {currentStepIndex < steps.length - 1 && (
-        <Button onClick={handleNext} className="ml-auto">
-          Next
+        <Button
+          onClick={() => goToNextStep(id, coverLetter.currentStep)}
+          className="ml-auto"
+          disabled={isNextStepLoading}
+        >
+          {isNextStepLoading ? "Loading..." : "Next"}
         </Button>
       )}
     </footer>

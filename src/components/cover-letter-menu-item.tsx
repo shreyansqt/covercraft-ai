@@ -4,7 +4,13 @@ import { useCoverLetter } from "@/hooks/use-cover-letter";
 import { Trash } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { Button } from "./ui/button";
+import { Badge } from "./ui/badge";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuTrigger,
+} from "./ui/context-menu";
 import { SidebarMenuButton, SidebarMenuItem } from "./ui/sidebar";
 
 export const CoverLetterMenuItem = ({ id }: { id: string }) => {
@@ -20,29 +26,41 @@ export const CoverLetterMenuItem = ({ id }: { id: string }) => {
     deleteCoverLetter();
   };
   return (
-    <SidebarMenuItem key={coverLetter.id} className="relative group/item">
-      <SidebarMenuButton
-        isActive={isActive}
-        asChild
-        className="items-start p-4 h-auto leading-none"
-      >
-        <Link href={href} className="flex flex-col gap-0.5">
-          <strong className="font-semibold">
-            {coverLetter.roleName || "Unknown role"}
-          </strong>
-          <span className="text-muted-foreground text-xs">
-            {coverLetter.companyName || "Unknown company"}
-          </span>
-        </Link>
-      </SidebarMenuButton>
-      <Button
-        variant="ghost"
-        size="sm"
-        className="top-1/2 right-2 absolute hover:bg-background opacity-0 group-hover/item:opacity-100 transition-opacity -translate-y-1/2 size-8"
-        onClick={onDelete}
-      >
-        <Trash className="w-4 h-4" weight="duotone" />
-      </Button>
-    </SidebarMenuItem>
+    <ContextMenu>
+      <SidebarMenuItem key={coverLetter.id} className="relative group/item">
+        <ContextMenuTrigger>
+          <SidebarMenuButton
+            isActive={isActive}
+            asChild
+            className="items-start h-auto leading-none"
+          >
+            <Link
+              href={href}
+              className="flex flex-col items-stretch gap-0.5 p-4"
+            >
+              <strong className="font-semibold">
+                {coverLetter.roleName || "Unknown role"}
+              </strong>
+              <div className="flex justify-between items-center">
+                <span className="text-muted-foreground text-xs">
+                  {coverLetter.companyName || "Unknown company"}
+                </span>
+                {coverLetter.matchScore && (
+                  <Badge variant="secondary" className="rounded-full text-xs">
+                    {coverLetter.matchScore * 100}% match
+                  </Badge>
+                )}
+              </div>
+            </Link>
+          </SidebarMenuButton>
+        </ContextMenuTrigger>
+        <ContextMenuContent>
+          <ContextMenuItem onClick={onDelete} className="gap-2 cursor-pointer">
+            <Trash className="size-4" weight="duotone" />
+            Delete
+          </ContextMenuItem>
+        </ContextMenuContent>
+      </SidebarMenuItem>
+    </ContextMenu>
   );
 };

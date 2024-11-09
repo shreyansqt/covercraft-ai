@@ -26,6 +26,21 @@ export default function LLMSettingsPage() {
           }
         />
 
+        <Label htmlFor="processJobDescriptionPrompt" className="mt-4">
+          Process Job Description Prompt
+        </Label>
+        <Textarea
+          id="jobMatchPrompt"
+          value={llmSettings.processJobDescriptionPrompt}
+          className="flex-1 mt-2 resize-none"
+          onChange={(e) =>
+            setLLMSettings({
+              ...llmSettings,
+              processJobDescriptionPrompt: e.target.value,
+            })
+          }
+        />
+
         <Label htmlFor="jobSummaryPrompt" className="mt-4">
           Job Summary Prompt
         </Label>

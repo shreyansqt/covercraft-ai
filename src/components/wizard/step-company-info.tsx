@@ -1,13 +1,11 @@
+import { useCoverLetter } from "@/hooks/use-cover-letter";
 import { Label } from "@radix-ui/react-label";
 import { Textarea } from "../ui/textarea";
-import type { StepComponentProps } from "./types";
 
-export const StepCompanyInfo = ({
-  coverLetter,
-  onUpdate,
-}: StepComponentProps) => {
+export const StepCompanyInfo = ({ id }: { id: string }) => {
+  const { coverLetter, updateCoverLetter } = useCoverLetter(id);
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    onUpdate({
+    updateCoverLetter({
       companyInfo: e.target.value,
     });
   };

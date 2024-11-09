@@ -7,7 +7,7 @@ export const Header = ({ children }: { children: React.ReactNode }) => {
     <header className="px-6 py-4 border-b">
       <div className="flex items-start">
         {(!open || isMobile) && <SidebarTrigger className="mr-2" />}
-        <div>{children}</div>
+        <div className="flex-1">{children}</div>
       </div>
     </header>
   );

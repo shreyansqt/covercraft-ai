@@ -1,18 +1,19 @@
 "use client";
+import { useCoverLetter } from "@/hooks/use-cover-letter";
 import { useLLMSettings } from "@/hooks/use-llm-settings";
+import { useResume } from "@/hooks/use-resume";
 import { PaperPlaneIcon } from "@radix-ui/react-icons";
 import { useChat, type Message } from "ai/react";
 import { useEffect, useRef } from "react";
-import { useLocalStorage } from "usehooks-ts";
 import { Button } from "../ui/button";
 import { ChatBubble, ChatBubbleMessage } from "../ui/chat/chat-bubble";
 import { ChatMessageList } from "../ui/chat/chat-message-list";
 import { Textarea } from "../ui/textarea";
-import type { StepComponentProps } from "./types";
 
-const StepChat = ({ coverLetter, onUpdate }: StepComponentProps) => {
+const StepChat = ({ id }: { id: string }) => {
+  const { coverLetter, updateCoverLetter } = useCoverLetter(id);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
-  const resume = useLocalStorage("resume", "");
+  const { resume } = useResume();
   const { llmSettings } = useLLMSettings();
   const { messages, input, handleInputChange, handleSubmit } = useChat({
     api: "/api/chat",
@@ -29,7 +30,7 @@ const StepChat = ({ coverLetter, onUpdate }: StepComponentProps) => {
     },
     keepLastMessageOnError: true,
     onFinish: (message) => {
-      onUpdate((coverLetter) => ({
+      updateCoverLetter((coverLetter) => ({
         chat: [...(coverLetter.chat || []), message],
       }));
     },
@@ -37,7 +38,7 @@ const StepChat = ({ coverLetter, onUpdate }: StepComponentProps) => {
 
   const submitUserMessage = () => {
     handleSubmit();
-    onUpdate((coverLetter) => ({
+    updateCoverLetter((coverLetter) => ({
       chat: [
         ...(coverLetter.chat || []),
         {

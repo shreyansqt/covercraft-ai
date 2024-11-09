@@ -44,9 +44,12 @@ Things to keep in mind:
 - Make sure to mention candidate's past experiences from the resume.
 - Make sure to insert today's date in place of [Date]`;
 
+const defaultProcessJobDescriptionPrompt = `Based on the above context, provide structured data in JSON format`;
+
 const defaultLLMSettings: LLMSettings = {
   jobSummaryPrompt: defaultJobSummaryPrompt,
   coverLetterPrompt: defaultCoverLetterPrompt,
+  processJobDescriptionPrompt: defaultProcessJobDescriptionPrompt,
 };
 
 export const useLLMSettings = () => {
