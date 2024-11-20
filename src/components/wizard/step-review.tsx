@@ -1,8 +1,5 @@
 "use client";
 import { useCoverLetter } from "@/hooks/use-cover-letter";
-import { useLLMSettings } from "@/hooks/use-llm-settings";
-import { useResume } from "@/hooks/use-resume";
-import { generateCoverLetter } from "@/lib/generateCoverLetter";
 import { cn } from "@/lib/utils";
 import { ArrowsClockwise } from "@phosphor-icons/react";
 import { Label } from "@radix-ui/react-label";
@@ -12,28 +9,24 @@ import { Button } from "../ui/button";
 import { DownloadForm } from "./download-form";
 
 export const StepReview = ({ id }: { id: string }) => {
-  const { coverLetter, updateCoverLetter } = useCoverLetter(id);
-  const { resume } = useResume();
-  const { llmSettings } = useLLMSettings();
+  const { coverLetter, updateCoverLetter, fetchCoverLetter } =
+    useCoverLetter(id);
   const [isLoading, setIsLoading] = useState(false);
 
   const generate = useCallback(async () => {
     setIsLoading(true);
-    const content = await generateCoverLetter(coverLetter, resume, llmSettings);
-    updateCoverLetter({
-      content,
-    });
+    await fetchCoverLetter();
     setIsLoading(false);
-  }, [coverLetter, resume, llmSettings, updateCoverLetter]);
+  }, [fetchCoverLetter]);
 
   useEffect(() => {
-    if (!coverLetter.content) {
+    if (coverLetter.content === undefined) {
       generate();
     }
   }, [generate, coverLetter.content]);
 
   const handleChange = (value: string) => {
-    onUpdate({
+    updateCoverLetter({
       content: value,
     });
   };

@@ -20,9 +20,9 @@ import {
   Sparkle,
   UserSquare,
 } from "@phosphor-icons/react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { CoverLetterMenuItem } from "./cover-letter-menu-item";
 import { Logo } from "./logo";
 import { Button } from "./ui/button";
 import {
@@ -43,6 +43,10 @@ const settingsMenuItems = [
     icon: Sparkle,
   },
 ];
+
+const CoverLetterMenuItem = dynamic(() => import("./cover-letter-menu-item"), {
+  ssr: false,
+});
 
 export const AppSidebar = () => {
   const pathname = usePathname();

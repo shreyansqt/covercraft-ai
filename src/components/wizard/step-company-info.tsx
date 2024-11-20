@@ -1,9 +1,11 @@
+"use client";
 import { useCoverLetter } from "@/hooks/use-cover-letter";
 import { Label } from "@radix-ui/react-label";
 import { Textarea } from "../ui/textarea";
 
 export const StepCompanyInfo = ({ id }: { id: string }) => {
   const { coverLetter, updateCoverLetter } = useCoverLetter(id);
+
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     updateCoverLetter({
       companyInfo: e.target.value,

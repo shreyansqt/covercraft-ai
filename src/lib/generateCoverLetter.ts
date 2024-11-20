@@ -1,42 +1,22 @@
-import type { CoverLetter, LLMSettings } from "@/types";
+import type { LLMSettings } from "@/types";
 import { createOpenAI } from "@ai-sdk/openai";
 import { generateText } from "ai";
+import { getPromptWithContext } from "./utils";
 
 export const generateCoverLetter = async (
-  coverLetter: CoverLetter,
-  resume: string,
+  coverLetterContext: string,
   llmSettings: LLMSettings
 ): Promise<string> => {
   const openai = createOpenAI({
     apiKey: llmSettings.apiKey,
   });
 
-  const prompt = `${llmSettings.coverLetterPrompt}
-
-Job Description:
-${coverLetter.jobDescription}
-
-Company Info:
-${coverLetter.companyInfo}
-
-Resume:
-${resume}
-
-Selected Keywords:
-${coverLetter.keywords
-  .filter((k) => k.selected)
-  .map((k) => k.keyword)
-  .join(", ")}
-  
-  Today's date: ${new Date().toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  })}`;
-
   const { text } = await generateText({
-    model: openai("gpt-4o"),
-    prompt,
+    model: openai("gpt-4o-mini"),
+    prompt: getPromptWithContext(
+      llmSettings.coverLetterPrompt,
+      coverLetterContext
+    ),
   });
 
   return text;

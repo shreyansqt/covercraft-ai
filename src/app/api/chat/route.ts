@@ -9,7 +9,8 @@ export async function POST(req: Request) {
   const body = await req.json();
 
   const openai = createOpenAI({
-    apiKey: body.apiKey,
+    apiKey: process.env.OPENAI_API_KEY,
+    compatibility: "strict",
   });
 
   const result = await streamText({
@@ -20,13 +21,16 @@ export async function POST(req: Request) {
     Job Description: ${body.jobDescription}
     Company Information: ${body.companyInfo}
     Selected Keywords: ${(body.keywords as Keyword[])
-      .map((k) => k.keyword)
+      .map((k) => k.name)
       .join(", ")}
     Resume: ${body.resume}
     ---
     Answer the user's questions based on the information provided.
     `,
     messages: body.messages,
+    onFinish: ({ usage }) => {
+      console.log(usage);
+    },
   });
 
   return result.toDataStreamResponse();

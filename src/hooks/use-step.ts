@@ -4,7 +4,7 @@ import { StepJobDescription } from "@/components/wizard/step-job-description";
 import { StepKeywords } from "@/components/wizard/step-keywords";
 import { StepReview } from "@/components/wizard/step-review";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+
 export enum Step {
   JobDescription = "job-description",
   CompanyInfo = "company-info",
@@ -31,22 +31,11 @@ const stepLabels = {
   [Step.Chat]: "Chat",
 };
 
-let stepActions: Partial<Record<Step, () => Promise<void>>> = {};
-
 export const useStep = () => {
   const router = useRouter();
-  // state
-  const [isNextStepLoading, setIsNextStepLoading] = useState(false);
 
-  // methods
   const goToNextStep = async (id: string, currentStep: Step) => {
     const currentStepIndex = Object.values(Step).indexOf(currentStep);
-    const currentStepAction = stepActions[currentStep];
-    if (currentStepAction) {
-      setIsNextStepLoading(true);
-      await currentStepAction();
-      setIsNextStepLoading(false);
-    }
     const nextStep = steps[currentStepIndex + 1];
     if (nextStep) {
       router.push(`/app/cover-letter/${id}/${nextStep}`);
@@ -65,10 +54,6 @@ export const useStep = () => {
     router.push(`/app/cover-letter/${id}/${step}`);
   };
 
-  const registerStepAction = (step: Step, action: () => Promise<void>) => {
-    stepActions = { ...stepActions, [step]: action };
-  };
-
   const getStepLabel = (step: Step) => {
     return stepLabels[step];
   };
@@ -82,14 +67,10 @@ export const useStep = () => {
   };
 
   return {
-    // state
     steps,
-    isNextStepLoading,
-    // methods
     goToPreviousStep,
     goToNextStep,
     goToStep,
-    registerStepAction,
     getStepLabel,
     getStepComponent,
     getStepIndex,

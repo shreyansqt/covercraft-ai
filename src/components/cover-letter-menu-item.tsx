@@ -4,7 +4,7 @@ import { useCoverLetter } from "@/hooks/use-cover-letter";
 import { Trash } from "@phosphor-icons/react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { Badge } from "./ui/badge";
+import { MyBadge } from "./my-badge";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -27,28 +27,40 @@ export const CoverLetterMenuItem = ({ id }: { id: string }) => {
   };
   return (
     <ContextMenu>
-      <SidebarMenuItem key={coverLetter.id} className="relative group/item">
+      <SidebarMenuItem
+        key={coverLetter.id}
+        className="relative group/item"
+        suppressHydrationWarning
+      >
         <ContextMenuTrigger>
           <SidebarMenuButton
             isActive={isActive}
             asChild
             className="items-start h-auto leading-none"
+            suppressHydrationWarning
           >
             <Link
               href={href}
               className="flex flex-col items-stretch gap-0.5 p-4"
             >
-              <strong className="font-semibold">
-                {coverLetter.roleName || "Unknown role"}
+              <strong className="font-semibold" suppressHydrationWarning>
+                {coverLetter.jobInfo?.roleName || "Unknown role"}
               </strong>
               <div className="flex justify-between items-center">
-                <span className="text-muted-foreground text-xs">
-                  {coverLetter.companyName || "Unknown company"}
+                <span
+                  className="text-muted-foreground text-xs"
+                  suppressHydrationWarning
+                >
+                  {coverLetter.jobInfo?.companyName || "Unknown company"}
                 </span>
-                {coverLetter.matchScore && (
-                  <Badge variant="secondary" className="rounded-full text-xs">
-                    {coverLetter.matchScore * 100}% match
-                  </Badge>
+                {coverLetter.jobInfo?.matchScore && (
+                  <MyBadge
+                    variant="secondary"
+                    size="sm"
+                    suppressHydrationWarning
+                  >
+                    {coverLetter.jobInfo?.matchScore}% match
+                  </MyBadge>
                 )}
               </div>
             </Link>
@@ -64,3 +76,5 @@ export const CoverLetterMenuItem = ({ id }: { id: string }) => {
     </ContextMenu>
   );
 };
+
+export default CoverLetterMenuItem;

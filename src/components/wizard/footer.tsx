@@ -6,16 +6,20 @@ import { ArrowLeft } from "@phosphor-icons/react";
 import { Button } from "../ui/button";
 
 export const CoverLetterFooter = ({ id }: { id: string }) => {
-  const { coverLetter } = useCoverLetter(id);
-  const {
-    steps,
-    getStepIndex,
-    goToPreviousStep,
-    goToNextStep,
-    isNextStepLoading,
-  } = useStep();
+  const { coverLetter, fetchJobInfo, fetchKeywords } = useCoverLetter(id);
+  const { steps, getStepIndex, goToPreviousStep, goToNextStep } = useStep();
 
   const currentStepIndex = getStepIndex(coverLetter.currentStep);
+
+  const handleNextClick = () => {
+    if (!coverLetter.jobInfo) {
+      fetchJobInfo();
+    }
+    if (!coverLetter.keywords || coverLetter.keywords.length === 0) {
+      fetchKeywords();
+    }
+    goToNextStep(id, coverLetter.currentStep);
+  };
 
   return (
     <footer className="flex px-6 py-4 border-t">
@@ -31,12 +35,8 @@ export const CoverLetterFooter = ({ id }: { id: string }) => {
       )}
 
       {currentStepIndex < steps.length - 1 && (
-        <Button
-          onClick={() => goToNextStep(id, coverLetter.currentStep)}
-          className="ml-auto"
-          disabled={isNextStepLoading}
-        >
-          {isNextStepLoading ? "Loading..." : "Next"}
+        <Button onClick={handleNextClick} className="ml-auto">
+          Next
         </Button>
       )}
     </footer>
