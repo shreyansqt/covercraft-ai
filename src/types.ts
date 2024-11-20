@@ -18,7 +18,7 @@ export interface CoverLetter {
   // step 2: company info, populated by user
   companyInfo?: string;
   // step 3: keywords, populated by llm
-  keywords: Array<SelectedKeyword>;
+  keywords?: Array<SelectedKeyword>;
   // step 4: review, populated by llm
   content?: string;
   // step 5: chat, populated by user & llm

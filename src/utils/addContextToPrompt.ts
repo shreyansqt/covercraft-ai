@@ -21,7 +21,7 @@ export const addContextToPrompt = (
     ${getLabeledValue(
       "Selected Keywords",
       coverLetter?.keywords
-        .filter((k) => k.selected)
+        ?.filter((k) => k.selected)
         .map((k) => k.name)
         .join(", ")
     )}

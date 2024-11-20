@@ -20,7 +20,7 @@ export const DownloadForm = ({ coverLetter }: { coverLetter: CoverLetter }) => {
       method: "POST",
       body: JSON.stringify({ content: coverLetter.content, fileName }),
     });
-    // console.log(await response.json());
+
     const blob = await response.blob();
     const url = window.URL.createObjectURL(blob);
 

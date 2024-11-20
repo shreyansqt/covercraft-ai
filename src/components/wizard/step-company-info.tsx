@@ -1,10 +1,17 @@
 "use client";
 import { useCoverLetter } from "@/hooks/use-cover-letter";
 import { Label } from "@radix-ui/react-label";
+import { useEffect } from "react";
 import { Textarea } from "../ui/textarea";
 
 export const StepCompanyInfo = ({ id }: { id: string }) => {
-  const { coverLetter, updateCoverLetter } = useCoverLetter(id);
+  const { coverLetter, updateCoverLetter, fetchJobInfo } = useCoverLetter(id);
+
+  useEffect(() => {
+    if (!coverLetter.jobInfo) {
+      fetchJobInfo();
+    }
+  }, [coverLetter.jobInfo, fetchJobInfo]);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     updateCoverLetter({

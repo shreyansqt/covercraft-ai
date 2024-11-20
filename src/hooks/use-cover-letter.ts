@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback } from "react";
+import { jobInfoSchema, keywordSchema } from "@/schemas";
+import { useCallback, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
 import { CoverLetter } from "../types";
 import { addContextToPrompt } from "../utils/addContextToPrompt";
@@ -12,12 +13,14 @@ import { Step } from "./use-step";
 export const useCoverLetter = (id: string) => {
   const { llmSettings } = useLLMSettings();
   const { resume } = useResume();
+  const [fetchingJobInfo, setFetchingJobInfo] = useState(false);
+  const [fetchingKeywords, setFetchingKeywords] = useState(false);
+  const [fetchingCoverLetter, setFetchingCoverLetter] = useState(false);
 
   const { deleteCoverLetterById } = useCoverLetters();
   const [coverLetter, setCoverLetter, removeCoverLetter] =
     useLocalStorage<CoverLetter>(`cover-letter-${id}`, {
       id,
-      keywords: [],
       currentStep: Step.JobDescription,
     });
 
@@ -31,8 +34,9 @@ export const useCoverLetter = (id: string) => {
     [setCoverLetter]
   );
 
-  const fetchJobInfo = () =>
-    fetch("/api/job-info", {
+  const fetchJobInfo = async () => {
+    setFetchingJobInfo(true);
+    const response = await fetch("/api/job-info", {
       method: "POST",
       body: JSON.stringify({
         prompt: addContextToPrompt(
@@ -41,16 +45,15 @@ export const useCoverLetter = (id: string) => {
           resume
         ),
       }),
-    })
-      .then((res) => res.json())
-      .then((jobInfo) => {
-        updateCoverLetter({
-          jobInfo,
-        });
-      });
+    }).then((res) => res.json());
+    const jobInfo = jobInfoSchema.parse(response);
+    updateCoverLetter({ jobInfo });
+    setFetchingJobInfo(false);
+  };
 
-  const fetchKeywords = () =>
-    fetch("/api/keywords", {
+  const fetchKeywords = async () => {
+    setFetchingKeywords(true);
+    const response = (await fetch("/api/keywords", {
       method: "POST",
       body: JSON.stringify({
         prompt: addContextToPrompt(
@@ -59,16 +62,15 @@ export const useCoverLetter = (id: string) => {
           resume
         ),
       }),
-    })
-      .then((res) => res.json())
-      .then((keywords) => {
-        updateCoverLetter({
-          keywords,
-        });
-      });
+    }).then((res) => res.json())) as unknown[];
+    const keywords = response.map((k) => keywordSchema.parse(k));
+    updateCoverLetter({ keywords });
+    setFetchingKeywords(false);
+  };
 
-  const fetchCoverLetter = () =>
-    fetch("/api/cover-letter", {
+  const fetchCoverLetter = async () => {
+    setFetchingCoverLetter(true);
+    const content = await fetch("/api/cover-letter", {
       method: "POST",
       body: JSON.stringify({
         prompt: addContextToPrompt(
@@ -77,13 +79,10 @@ export const useCoverLetter = (id: string) => {
           resume
         ),
       }),
-    })
-      .then((res) => res.text())
-      .then((text) => {
-        updateCoverLetter({
-          content: text,
-        });
-      });
+    }).then((res) => res.text());
+    updateCoverLetter({ content });
+    setFetchingCoverLetter(false);
+  };
 
   const deleteCoverLetter = (): string[] => {
     removeCoverLetter();
@@ -92,6 +91,9 @@ export const useCoverLetter = (id: string) => {
 
   return {
     coverLetter,
+    fetchingJobInfo,
+    fetchingKeywords,
+    fetchingCoverLetter,
     fetchJobInfo,
     fetchKeywords,
     fetchCoverLetter,

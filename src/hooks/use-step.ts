@@ -3,6 +3,7 @@ import { StepCompanyInfo } from "@/components/wizard/step-company-info";
 import { StepJobDescription } from "@/components/wizard/step-job-description";
 import { StepKeywords } from "@/components/wizard/step-keywords";
 import { StepReview } from "@/components/wizard/step-review";
+import type { CoverLetter } from "@/types";
 import { useRouter } from "next/navigation";
 
 export enum Step {
@@ -29,6 +30,20 @@ const stepLabels = {
   [Step.Keywords]: "Keywords",
   [Step.Review]: "Review & Export",
   [Step.Chat]: "Chat",
+};
+
+const preStepRequirements: Record<Step, (keyof CoverLetter)[]> = {
+  [Step.JobDescription]: [],
+  [Step.CompanyInfo]: ["jobDescription"],
+  [Step.Keywords]: ["jobDescription", "jobInfo", "companyInfo"],
+  [Step.Review]: ["jobDescription", "jobInfo", "companyInfo", "keywords"],
+  [Step.Chat]: [
+    "jobDescription",
+    "jobInfo",
+    "companyInfo",
+    "keywords",
+    "content",
+  ],
 };
 
 export const useStep = () => {
@@ -66,6 +81,11 @@ export const useStep = () => {
     return Object.values(Step).indexOf(step);
   };
 
+  const canGoToStep = (step: Step, coverLetter: CoverLetter) => {
+    const requiredKeys = preStepRequirements[step];
+    return requiredKeys.every((key) => coverLetter[key]);
+  };
+
   return {
     steps,
     goToPreviousStep,
@@ -74,5 +94,6 @@ export const useStep = () => {
     getStepLabel,
     getStepComponent,
     getStepIndex,
+    canGoToStep,
   };
 };
