@@ -10,7 +10,7 @@ export const DownloadForm = ({ coverLetter }: { coverLetter: CoverLetter }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [fileName, setFileName] = useLocalStorage(
     "cover-letter-file-name",
-    `${coverLetter.companyName} - ${coverLetter.roleName} Cover Letter`
+    `${coverLetter.jobInfo?.companyName} - ${coverLetter.jobInfo?.roleName} Cover Letter`
   );
 
   const handleGeneratePDF = async (e: React.FormEvent<HTMLFormElement>) => {

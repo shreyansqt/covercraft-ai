@@ -2,6 +2,7 @@
 import { useCoverLetter } from "@/hooks/use-cover-letter";
 import { useLLMSettings } from "@/hooks/use-llm-settings";
 import { useResume } from "@/hooks/use-resume";
+import { addContextToPrompt } from "@/utils/addContextToPrompt";
 import { PaperPlaneIcon } from "@radix-ui/react-icons";
 import { useChat, type Message } from "ai/react";
 import { useEffect, useRef } from "react";
@@ -20,13 +21,7 @@ const StepChat = ({ id }: { id: string }) => {
     id: coverLetter.id,
     initialMessages: [...(coverLetter.chat || [])],
     body: {
-      roleName: coverLetter.roleName,
-      companyName: coverLetter.companyName,
-      jobDescription: coverLetter.jobDescription,
-      companyInfo: coverLetter.companyInfo,
-      keywords: coverLetter.keywords,
-      apiKey: llmSettings.apiKey,
-      resume,
+      prompt: addContextToPrompt(llmSettings.chatPrompt, coverLetter, resume),
     },
     keepLastMessageOnError: true,
     onFinish: (message) => {
@@ -63,9 +58,9 @@ const StepChat = ({ id }: { id: string }) => {
         <ChatBubble variant="received">
           <ChatBubbleMessage variant="received">
             Hello! I am your cover letter assistant. Ask me anything about the
-            role of <strong>{coverLetter.roleName}</strong> at{" "}
-            <strong>{coverLetter.companyName}</strong>. I can also answer
-            questions about your experience based on your resume.
+            role of <strong>{coverLetter.jobInfo?.roleName}</strong> at{" "}
+            <strong>{coverLetter.jobInfo?.companyName}</strong>. I can also
+            answer questions about your experience based on your resume.
           </ChatBubbleMessage>
         </ChatBubble>
         {messages.map((message: Message) => {

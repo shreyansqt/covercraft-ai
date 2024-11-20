@@ -42,3 +42,5 @@ Things to keep in mind:
 - The tone of the cover letter should be professional, friendly and upbeat.
 - Make sure to mention candidate's past experiences from the resume.
 - Make sure to insert today's date in place of [Date]`;
+
+export const chatPrompt = `The user is applying for a job. They have generated a cover letter. Answer the user's questions based on the above context.`;

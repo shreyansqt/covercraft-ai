@@ -1,4 +1,9 @@
-import { coverLetterPrompt, jobInfoPrompt, keywordsPrompt } from "@/prompts";
+import {
+  chatPrompt,
+  coverLetterPrompt,
+  jobInfoPrompt,
+  keywordsPrompt,
+} from "@/prompts";
 import type { LLMSettings } from "@/types";
 import { useLocalStorage } from "usehooks-ts";
 
@@ -9,6 +14,7 @@ export const useLLMSettings = () => {
       jobInfoPrompt,
       keywordsPrompt,
       coverLetterPrompt,
+      chatPrompt,
     }
   );
   return { llmSettings, setLLMSettings };

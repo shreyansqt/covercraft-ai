@@ -29,4 +29,5 @@ export type LLMSettings = {
   jobInfoPrompt: string;
   keywordsPrompt: string;
   coverLetterPrompt: string;
+  chatPrompt: string;
 };
