@@ -6,8 +6,6 @@ A web application that helps you generate personalized cover letters using AI. B
 
 Visit [https://covercraftai.com/](https://covercraftai.com/) to start using CoverCraft AI.
 
-**Note:** You'll need your own [OpenAI API key](https://platform.openai.com/api-keys) to use this application.
-
 ## Features
 
 - 🤖 AI-powered cover letter generation using OpenAI's GPT-4

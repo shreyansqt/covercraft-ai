@@ -30,7 +30,7 @@ const features = [
     icon: FilePdf,
     title: "Instant Editing & PDF Export",
     description:
-      "Make edits directly after generation, and skip the copy-paste—download a polished PDF in one click.",
+      "Make edits directly after generation, and download a polished PDF in one click.",
   },
   {
     icon: ChatTeardropDots,
@@ -48,7 +48,7 @@ const features = [
     icon: EyeClosed,
     title: "Private & Secure",
     description:
-      "All data is stored locally in your browser—no external servers, just you and your secure setup.",
+      "All data is stored locally in your browser. Code is open source and available on GitHub.",
   },
 ];
 
@@ -83,9 +83,8 @@ export default function LandingPage() {
             Craft the Perfect Cover Letter, Completely Free.
           </h1>
           <p className="mx-auto max-w-2xl text-muted-foreground text-xl">
-            Just bring your OpenAI API Key. Generate, customize, and download
-            your cover letter in minutes—all securely in your browser, no cost
-            involved.
+            Generate, customize, and download your cover letter in minutes—all
+            securely in your browser, no cost involved.
           </p>
           <Button size="lg" asChild className="shadow-none mx-auto">
             <Link href="/app">Create Your First Cover Letter</Link>
