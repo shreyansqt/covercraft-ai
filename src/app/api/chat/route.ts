@@ -13,7 +13,7 @@ export async function POST(req: Request) {
   });
 
   const result = await streamText({
-    model: openai("gpt-4o-mini"),
+    model: openai(process.env.OPENAI_MODEL || "gpt-4o-mini"),
     system: body.prompt,
     messages: body.messages,
   });

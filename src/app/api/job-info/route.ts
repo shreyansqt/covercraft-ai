@@ -11,7 +11,7 @@ export async function POST(req: Request) {
   });
 
   const result = await generateObject({
-    model: openai("gpt-4o-mini"),
+    model: openai(process.env.OPENAI_MODEL || "gpt-4o-mini"),
     schemaName: "jobSummary",
     schema: jobInfoSchema,
     prompt: body.prompt,

@@ -89,10 +89,15 @@ export async function POST(request: Request) {
 
     await browser.close();
 
+    // Sanitize the filename to remove special characters and spaces
+    const sanitizedFileName = fileName
+      .replace(/[^\x00-\x7F]/g, "") // Remove non-ASCII characters
+      .replace(/[^a-zA-Z0-9-_]/g, "_"); // Replace other special chars with underscore
+
     return new NextResponse(pdf, {
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename=${fileName}.pdf`,
+        "Content-Disposition": `attachment; filename=${sanitizedFileName}.pdf`,
       },
     });
   } catch (error) {

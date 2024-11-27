@@ -10,7 +10,7 @@ export async function POST(req: Request) {
   });
 
   const { text } = await generateText({
-    model: openai("gpt-4o-mini"),
+    model: openai(process.env.OPENAI_MODEL || "gpt-4o-mini"),
     prompt: body.prompt,
   });
 
