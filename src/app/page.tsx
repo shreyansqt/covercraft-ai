@@ -3,6 +3,7 @@ import { Logo } from "@/components/logo";
 import { SignIn } from "@/components/sign-in";
 import { SignOut } from "@/components/sign-out";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
   ChatTeardropDots,
@@ -13,6 +14,7 @@ import {
   MagicWand,
   PaintBrush,
 } from "@phosphor-icons/react/dist/ssr";
+import Link from "next/link";
 
 const features = [
   {
@@ -99,9 +101,15 @@ export default async function LandingPage() {
             Generate, customize, and download your cover letter in minutes—all
             securely in your browser, no cost involved.
           </p>
-          <SignIn size="lg" className="shadow-none mx-auto">
-            Create Your First Cover Letter
-          </SignIn>
+          {session ? (
+            <Button size="lg" className="shadow-none mx-auto" asChild>
+              <Link href="/app">Create Your First Cover Letter</Link>
+            </Button>
+          ) : (
+            <SignIn size="lg" className="shadow-none mx-auto">
+              Create Your First Cover Letter
+            </SignIn>
+          )}
         </div>
 
         {/* Features Grid */}
