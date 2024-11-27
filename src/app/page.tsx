@@ -1,6 +1,8 @@
-"use client";
+import { auth } from "@/auth";
 import { Logo } from "@/components/logo";
-import { Button } from "@/components/ui/button";
+import { SignIn } from "@/components/sign-in";
+import { SignOut } from "@/components/sign-out";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card } from "@/components/ui/card";
 import {
   ChatTeardropDots,
@@ -11,7 +13,6 @@ import {
   MagicWand,
   PaintBrush,
 } from "@phosphor-icons/react/dist/ssr";
-import Link from "next/link";
 
 const features = [
   {
@@ -52,7 +53,8 @@ const features = [
   },
 ];
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  const session = await auth();
   return (
     <>
       <header className="top-0 z-10 sticky bg-background border-b">
@@ -70,9 +72,20 @@ export default function LandingPage() {
               <GithubLogo className="size-6" weight="duotone" />
               <span>GitHub</span>
             </a>
-            <Button size="sm" asChild className="shadow-none">
-              <Link href="/app">Open App</Link>
-            </Button>
+            {session ? (
+              <>
+                <Avatar>
+                  <AvatarImage
+                    src={session.user?.image ?? ""}
+                    referrerPolicy="no-referrer"
+                  />
+                  <AvatarFallback>{session.user?.name?.[0]}</AvatarFallback>
+                </Avatar>
+                <SignOut />
+              </>
+            ) : (
+              <SignIn />
+            )}
           </div>
         </div>
       </header>
@@ -86,9 +99,9 @@ export default function LandingPage() {
             Generate, customize, and download your cover letter in minutes—all
             securely in your browser, no cost involved.
           </p>
-          <Button size="lg" asChild className="shadow-none mx-auto">
-            <Link href="/app">Create Your First Cover Letter</Link>
-          </Button>
+          <SignIn size="lg" className="shadow-none mx-auto">
+            Create Your First Cover Letter
+          </SignIn>
         </div>
 
         {/* Features Grid */}
