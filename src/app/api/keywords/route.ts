@@ -8,14 +8,15 @@ const schema = z.object({
   keywords: z.array(keywordSchema),
 });
 
-export const POST = auth(async (req) => {
-  if (req.auth) {
-    const body = await req.json();
+const openai = createOpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+  compatibility: "strict",
+});
 
-    const openai = createOpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
-      compatibility: "strict",
-    });
+export async function POST(req: Request) {
+  const session = await auth();
+  if (session) {
+    const body = await req.json();
 
     const result = await generateObject({
       model: openai(process.env.OPENAI_MODEL || "gpt-4o-mini"),
@@ -28,4 +29,4 @@ export const POST = auth(async (req) => {
   } else {
     return Response.json("401 Unauthorized", { status: 401 });
   }
-});
+}

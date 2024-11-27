@@ -12,8 +12,9 @@ const getPuppeteer = async () => {
   }
 };
 
-export const POST = auth(async (req) => {
-  if (req.auth) {
+export async function POST(req: Request) {
+  const session = await auth();
+  if (session) {
     try {
       const { content, fileName } = await req.json();
       const { puppeteer } = await getPuppeteer();
@@ -112,4 +113,4 @@ export const POST = auth(async (req) => {
   } else {
     return Response.json("401 Unauthorized", { status: 401 });
   }
-});
+}
