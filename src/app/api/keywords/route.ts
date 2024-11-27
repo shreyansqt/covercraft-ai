@@ -1,3 +1,4 @@
+import { auth } from "@/auth";
 import { keywordSchema } from "@/schemas";
 import { createOpenAI } from "@ai-sdk/openai";
 import { generateObject } from "ai";
@@ -7,20 +8,24 @@ const schema = z.object({
   keywords: z.array(keywordSchema),
 });
 
-export async function POST(req: Request) {
-  const body = await req.json();
+export const POST = auth(async (req) => {
+  if (req.auth) {
+    const body = await req.json();
 
-  const openai = createOpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-    compatibility: "strict",
-  });
+    const openai = createOpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+      compatibility: "strict",
+    });
 
-  const result = await generateObject({
-    model: openai(process.env.OPENAI_MODEL || "gpt-4o-mini"),
-    schemaName: "keywords",
-    schema,
-    prompt: body.prompt,
-  });
+    const result = await generateObject({
+      model: openai(process.env.OPENAI_MODEL || "gpt-4o-mini"),
+      schemaName: "keywords",
+      schema,
+      prompt: body.prompt,
+    });
 
-  return Response.json(result.object.keywords);
-}
+    return Response.json(result.object.keywords);
+  } else {
+    return Response.json("401 Unauthorized", { status: 401 });
+  }
+});

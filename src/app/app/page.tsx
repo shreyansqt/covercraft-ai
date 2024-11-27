@@ -1,32 +1,18 @@
-"use client";
-import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
-import { useSession } from "next-auth/react";
+import { auth } from "@/auth";
+import { SidebarButton } from "@/components/sidebar-button";
 
-export default function LandingPage() {
-  const { isMobile, open } = useSidebar();
-  const session = useSession();
+export default async function LandingPage() {
+  const session = await auth();
   return (
     <div className="relative flex flex-col justify-center items-center w-full min-h-screen">
-      {(!open || isMobile) && (
-        <SidebarTrigger className="top-4 left-4 absolute" />
-      )}
+      <SidebarButton />
       <div className="space-y-16 px-4 py-16 max-w-3xl">
         <div className="space-y-6">
           <h1 className="mb-4 font-semibold text-3xl">
-            Welcome {session.data?.user?.name}!
+            Welcome {session?.user?.name}!
           </h1>
           <h2 className="mb-4 font-semibold text-2xl">Get Started</h2>
           <ol className="space-y-4 ml-4 list-decimal">
-            <li className="text-muted-foreground">
-              Go to Settings &gt; LLM and add your{" "}
-              <a
-                href="https://platform.openai.com/api-keys"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                OpenAI API Key
-              </a>
-            </li>
             <li className="text-muted-foreground">
               Go to Settings &gt; Resume and paste text from your resume
             </li>

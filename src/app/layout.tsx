@@ -59,7 +59,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className={`${outfit.variable} antialiased relative`}>
-        <Analytics />
+        <Analytics debug={false} />
         {props.children}
       </body>
     </html>
