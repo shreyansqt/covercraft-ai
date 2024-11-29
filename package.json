@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:generate": "prisma generate --no-engine"
   },
   "dependencies": {
     "@ai-sdk/openai": "^0.0.71",
