@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "prisma:migrate": "prisma migrate dev",
-    "prisma:generate": "prisma generate --no-engine"
+    "prisma:generate": "prisma generate"
   },
   "dependencies": {
     "@ai-sdk/openai": "^0.0.71",

@@ -1,5 +1,11 @@
+// https://authjs.dev/guides/edge-compatibility
+
+import NextAuth from "next-auth";
 import { NextResponse } from "next/server";
-import { auth } from "./auth";
+
+import authConfig from "./auth.config";
+
+const { auth } = NextAuth(authConfig);
 
 export const middleware = auth((req) => {
   if (!req.auth && req.nextUrl.pathname !== "/") {
