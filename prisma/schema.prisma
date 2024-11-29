@@ -4,7 +4,9 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  engineType      = "library"
+  previewFeatures = ["driverAdapters"]
 }
 
 model User {
@@ -20,6 +22,8 @@ model User {
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  resumes Resume[]
 }
 
 model Account {
@@ -75,4 +79,14 @@ model Authenticator {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([userId, credentialID])
+}
+
+model Resume {
+  id        String   @id @default(cuid())
+  name      String
+  content   String // Store the resume text or a file reference
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
 }
