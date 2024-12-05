@@ -1,4 +1,4 @@
-import type { CoverLetter } from "@/types";
+import type { TypedCoverLetter } from "@/types";
 import { Download, SpinnerGap } from "@phosphor-icons/react";
 import { Label } from "@radix-ui/react-label";
 import { useState } from "react";
@@ -6,7 +6,11 @@ import { useLocalStorage } from "usehooks-ts";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
-export const DownloadForm = ({ coverLetter }: { coverLetter: CoverLetter }) => {
+export const DownloadForm = ({
+  coverLetter,
+}: {
+  coverLetter: TypedCoverLetter;
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [fileName, setFileName] = useLocalStorage(
     "cover-letter-file-name",

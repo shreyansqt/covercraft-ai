@@ -3,7 +3,7 @@
 import { jobInfoSchema, keywordSchema } from "@/schemas";
 import { useCallback, useState } from "react";
 import { useLocalStorage } from "usehooks-ts";
-import { CoverLetter } from "../types";
+import { TypedCoverLetter } from "../types";
 import { addContextToPrompt } from "../utils/addContextToPrompt";
 import { useCoverLetters } from "./use-cover-letters";
 import { useLLMSettings } from "./use-llm-settings";
@@ -19,13 +19,17 @@ export const useCoverLetter = (id: string) => {
 
   const { deleteCoverLetterById } = useCoverLetters();
   const [coverLetter, setCoverLetter, removeCoverLetter] =
-    useLocalStorage<CoverLetter>(`cover-letter-${id}`, {
+    useLocalStorage<TypedCoverLetter>(`cover-letter-${id}`, {
       id,
       currentStep: Step.JobDescription,
     });
 
   const updateCoverLetter = useCallback(
-    (updates: Partial<CoverLetter> | ((coverLetter: CoverLetter) => void)) => {
+    (
+      updates:
+        | Partial<TypedCoverLetter>
+        | ((coverLetter: TypedCoverLetter) => void)
+    ) => {
       setCoverLetter((coverLetter) => ({
         ...coverLetter,
         ...(typeof updates === "function" ? updates(coverLetter) : updates),
