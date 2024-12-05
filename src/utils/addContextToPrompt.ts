@@ -1,4 +1,4 @@
-import type { CoverLetter } from "@/types";
+import type { TypedCoverLetter } from "@/types";
 
 const getLabeledValue = (label: string, value: string | undefined) => {
   return value ? `${label}: ${value}` : "";
@@ -6,7 +6,7 @@ const getLabeledValue = (label: string, value: string | undefined) => {
 
 export const addContextToPrompt = (
   prompt: string,
-  coverLetter: CoverLetter,
+  coverLetter: TypedCoverLetter,
   resume: string
 ): string => {
   const result = `Applicant Resume: ${resume}
