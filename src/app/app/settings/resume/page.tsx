@@ -1,34 +1,24 @@
-"use client";
 import { Header } from "@/components/header";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { useResume } from "@/hooks/use-resume";
+import { ResumeForm } from "@/components/resume-form";
+import { prisma } from "@/prisma";
+import { getCurrentUser } from "@/services/user";
 
-export default function ResumePage() {
-  const { resume, setResume } = useResume();
+export default async function ResumePage() {
+  const user = await getCurrentUser();
+  if (!user) return <div>Not authenticated</div>;
 
-  const handleResumeChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const newContent = e.target.value;
-    setResume(newContent);
-  };
+  const resume = await prisma.resume.findFirst({
+    where: {
+      userId: user.id,
+    },
+  });
 
   return (
     <div className="flex flex-col h-full">
       <Header>
         <h1 className="font-semibold text-2xl">Resume</h1>
       </Header>
-      <div className="flex flex-col flex-1 p-6">
-        <Label htmlFor="resume" className="mb-2">
-          Resume content
-        </Label>
-        <Textarea
-          id="resume"
-          className="flex-1 resize-none"
-          value={resume}
-          onChange={handleResumeChange}
-          placeholder="Paste your resume content here..."
-        />
-      </div>
+      <ResumeForm currentResume={resume} />
     </div>
   );
 }
