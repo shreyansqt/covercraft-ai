@@ -1,13 +1,13 @@
 "use client";
 import { useLLMSettings } from "@/hooks/use-llm-settings";
-import { cn } from "@/lib/utils";
 import {
   generateCoverLetter,
   updateCoverLetter,
 } from "@/services/cover-letter";
 import type { TypedCoverLetter } from "@/types";
-import { ArrowsClockwise } from "@phosphor-icons/react";
+import { ArrowsClockwise, Spinner } from "@phosphor-icons/react";
 import { Label } from "@radix-ui/react-label";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { RichTextEditor } from "../rich-text-editor";
 import { Button } from "../ui/button";
@@ -18,6 +18,7 @@ export const StepReview = ({
 }: {
   coverLetter: TypedCoverLetter;
 }) => {
+  const router = useRouter();
   const { llmSettings } = useLLMSettings();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -25,7 +26,8 @@ export const StepReview = ({
     setIsLoading(true);
     await generateCoverLetter(coverLetter.id, llmSettings.coverLetterPrompt);
     setIsLoading(false);
-  }, [generateCoverLetter]);
+    router.refresh();
+  }, [llmSettings.coverLetterPrompt, coverLetter.id, router]);
 
   useEffect(() => {
     if (!coverLetter.content) {
@@ -33,20 +35,24 @@ export const StepReview = ({
     }
   }, [generate, coverLetter.content]);
 
-  const handleBlur = (value: string) => {
+  const handleBlur = async (value: string) => {
     if (value === coverLetter.content) return;
-    updateCoverLetter(coverLetter.id, {
+    await updateCoverLetter(coverLetter.id, {
       content: value,
     });
+    router.refresh();
   };
 
   return (
     <div className="flex flex-col gap-4 p-6 h-full">
       <div className="flex justify-between items-center">
-        <Label htmlFor="coverLetter">Generated Cover Letter</Label>
+        <div className="flex items-center gap-2">
+          <Label htmlFor="coverLetter">Generated Cover Letter</Label>
+          {isLoading && <Spinner className="animate-spin" />}
+        </div>
 
         <div className="flex items-center gap-2">
-          <DownloadForm coverLetter={coverLetter} />
+          <DownloadForm coverLetter={coverLetter} disabled={isLoading} />
           <Button
             variant="outline"
             size="sm"
@@ -54,23 +60,18 @@ export const StepReview = ({
             disabled={isLoading}
             className="flex items-center gap-2"
           >
-            <ArrowsClockwise
-              className={cn("w-4 h-4", isLoading && "animate-spin")}
-              weight="duotone"
-            />
-            {isLoading ? "Regenerating..." : "Regenerate"}
+            <ArrowsClockwise weight="duotone" />
+            Regenerate
           </Button>
         </div>
       </div>
-      {isLoading ? (
-        <div>Loading...</div>
-      ) : (
-        <div className="flex flex-col flex-1">
-          <RichTextEditor
-            value={coverLetter.content || ""}
-            onBlur={handleBlur}
-          />
-        </div>
+      {coverLetter.content && (
+        <RichTextEditor
+          value={coverLetter.content}
+          onBlur={handleBlur}
+          disabled={isLoading}
+          className="flex-1"
+        />
       )}
     </div>
   );

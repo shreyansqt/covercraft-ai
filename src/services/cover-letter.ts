@@ -1,14 +1,13 @@
 "use server";
 
-import { validateCoverLetter } from "@/lib/utils";
+import { addContextToPrompt } from "@/lib/add-context-to-prompt";
 import { prisma } from "@/prisma";
-import { jobInfoSchema, keywordSchema } from "@/schemas";
+import { chatMessageSchema, jobInfoSchema, keywordSchema } from "@/schemas";
 import type { TypedCoverLetter } from "@/types";
-import { addContextToPrompt } from "@/utils/addContextToPrompt";
 import { createOpenAI } from "@ai-sdk/openai";
-import type { User } from "@prisma/client";
+import type { CoverLetter } from "@prisma/client";
 import { generateObject, generateText } from "ai";
-import { revalidateTag, unstable_cache } from "next/cache";
+import { redirect } from "next/navigation";
 import { z } from "zod";
 import { getResume } from "./resume";
 import { getCurrentUser } from "./user";
@@ -18,27 +17,50 @@ const openai = createOpenAI({
   compatibility: "strict",
 });
 
-export const getCoverLetters = unstable_cache(
-  async (user: User) => {
-    const coverLetters = await prisma.coverLetter.findMany({
-      where: { userId: user.id },
-      orderBy: { createdAt: "desc" },
-    });
+const typeCoverLetter = (coverLetter: CoverLetter): TypedCoverLetter => {
+  const jobInfo = coverLetter.jobInfo
+    ? jobInfoSchema.parse(coverLetter.jobInfo)
+    : null;
+  const keywords = keywordSchema.array().parse(coverLetter.keywords);
+  const chat = chatMessageSchema.array().parse(
+    coverLetter.chat.map((message) => {
+      if (!message || typeof message !== "object" || Array.isArray(message))
+        return null;
+      return {
+        ...message,
+        createdAt: new Date(message.createdAt as string),
+      };
+    })
+  );
+  return { ...coverLetter, jobInfo, keywords, chat };
+};
 
-    return coverLetters.map(validateCoverLetter);
-  },
-  ["cover-letters"],
-  { revalidate: 3600, tags: ["cover-letters"] }
-);
+export const getCoverLetters = async () => {
+  const user = await getCurrentUser();
+  if (!user) {
+    throw new Error("Not authenticated");
+  }
+  const coverLetters = await prisma.coverLetter.findMany({
+    where: { userId: user.id },
+    orderBy: { createdAt: "desc" },
+  });
 
-export const getCoverLetter = unstable_cache(
-  async (id: string) => {
-    const coverLetter = await prisma.coverLetter.findUnique({ where: { id } });
-    return validateCoverLetter(coverLetter);
-  },
-  ["cover-letter"],
-  { revalidate: 3600, tags: ["cover-letter"] }
-);
+  const typedCoverLetters = coverLetters.map(typeCoverLetter);
+  return typedCoverLetters;
+};
+
+export const getCoverLetter = async (id: string) => {
+  const user = await getCurrentUser();
+  if (!user) {
+    throw new Error("Not authenticated");
+  }
+  const coverLetter = await prisma.coverLetter.findUnique({
+    where: { id, userId: user.id },
+  });
+  if (!coverLetter) throw new Error("Cover letter not found");
+  const typedCoverLetter = typeCoverLetter(coverLetter);
+  return typedCoverLetter;
+};
 
 export const createCoverLetter = async () => {
   const user = await getCurrentUser();
@@ -48,8 +70,8 @@ export const createCoverLetter = async () => {
   const coverLetter = await prisma.coverLetter.create({
     data: { userId: user.id },
   });
-  revalidateTag("cover-letters");
-  return validateCoverLetter(coverLetter);
+  const typedCoverLetter = typeCoverLetter(coverLetter);
+  return typedCoverLetter;
 };
 
 export const deleteCoverLetter = async (id: string) => {
@@ -57,16 +79,22 @@ export const deleteCoverLetter = async (id: string) => {
   if (!user) {
     throw new Error("Not authenticated");
   }
-  await prisma.coverLetter.delete({ where: { id } });
-  revalidateTag("cover-letters");
+  await prisma.coverLetter.delete({
+    where: { id, userId: user.id },
+  });
+  redirect("/app");
 };
 
 export const updateCoverLetter = async (
   id: string,
   data: Partial<TypedCoverLetter>
 ) => {
+  const user = await getCurrentUser();
+  if (!user) {
+    throw new Error("Not authenticated");
+  }
   await prisma.coverLetter.update({
-    where: { id },
+    where: { id, userId: user.id },
     data: {
       ...data,
       jobInfo: data.jobInfo || undefined,
@@ -74,7 +102,6 @@ export const updateCoverLetter = async (
       chat: data.chat?.filter((c) => c !== null) || undefined,
     },
   });
-  revalidateTag("cover-letter");
 };
 
 export const generateJobInfo = async (id: string, jobInfoPrompt: string) => {
@@ -95,7 +122,7 @@ export const generateJobInfo = async (id: string, jobInfoPrompt: string) => {
     prompt: addContextToPrompt(jobInfoPrompt, coverLetter, resume.content),
   });
 
-  updateCoverLetter(id, { jobInfo: result.object });
+  await updateCoverLetter(id, { jobInfo: result.object });
 };
 
 export const generateKeywords = async (id: string, keywordsPrompt: string) => {
@@ -120,7 +147,7 @@ export const generateKeywords = async (id: string, keywordsPrompt: string) => {
     prompt: addContextToPrompt(keywordsPrompt, coverLetter, resume.content),
   });
 
-  updateCoverLetter(id, {
+  await updateCoverLetter(id, {
     keywords: result.object.keywords,
   });
 };
@@ -144,5 +171,5 @@ export const generateCoverLetter = async (
     prompt: addContextToPrompt(coverLetterPrompt, coverLetter, resume.content),
   });
 
-  updateCoverLetter(id, { content: text });
+  await updateCoverLetter(id, { content: text });
 };

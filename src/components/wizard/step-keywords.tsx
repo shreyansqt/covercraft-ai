@@ -1,9 +1,13 @@
 "use client";
 import { useLLMSettings } from "@/hooks/use-llm-settings";
+import { cn } from "@/lib/utils";
 import { generateKeywords, updateCoverLetter } from "@/services/cover-letter";
 import type { Keyword as TKeyword, TypedCoverLetter } from "@/types";
-import { useEffect } from "react";
+import { ArrowsClockwise, Spinner } from "@phosphor-icons/react";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useTransition } from "react";
 import { Keyword } from "../keyword";
+import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 
 export const StepKeywords = ({
@@ -11,15 +15,23 @@ export const StepKeywords = ({
 }: {
   coverLetter: TypedCoverLetter;
 }) => {
+  const router = useRouter();
   const { llmSettings } = useLLMSettings();
 
-  if (!coverLetter.keywords) return null;
+  const [isLoading, startTransition] = useTransition();
+
+  const generate = useCallback(async () => {
+    startTransition(async () => {
+      await generateKeywords(coverLetter.id, llmSettings.keywordsPrompt);
+      router.refresh();
+    });
+  }, [coverLetter.id, llmSettings.keywordsPrompt, router]);
 
   useEffect(() => {
-    if (!coverLetter.keywords || coverLetter.keywords.length === 0) {
-      generateKeywords(coverLetter.id, llmSettings.keywordsPrompt);
+    if (coverLetter.keywords.length === 0) {
+      generate();
     }
-  }, [coverLetter.keywords, generateKeywords]);
+  }, [generate, coverLetter.keywords.length]);
 
   const updateKeyword = async (newKeyword: TKeyword) => {
     if (!coverLetter.keywords) return;
@@ -31,6 +43,7 @@ export const StepKeywords = ({
     await updateCoverLetter(coverLetter.id, {
       keywords: newKeywords,
     });
+    router.refresh();
   };
 
   // create map for rendering keywords in categories
@@ -45,20 +58,23 @@ export const StepKeywords = ({
   return (
     <div className="p-6 h-full">
       <div className="flex justify-between items-center mb-4">
-        <Label>Select Relevant Keywords</Label>
-        {/* <Button
+        <div className="flex items-center gap-2">
+          <Label>Select Relevant Keywords</Label>
+          {isLoading && <Spinner className="animate-spin" />}
+        </div>
+        <Button
           variant="outline"
           size="sm"
-          onClick={fetchKeywords}
+          onClick={generate}
           className="flex items-center gap-2"
-          disabled={fetchingKeywords}
+          disabled={isLoading}
         >
           <ArrowsClockwise
-            className={cn("w-4 h-4", fetchingKeywords && "animate-spin")}
+            className={cn("w-4 h-4", isLoading && "animate-spin")}
             weight="duotone"
           />
-          {fetchingKeywords ? "Regenerating..." : "Regenerate"}
-        </Button> */}
+          {isLoading ? "Regenerating..." : "Regenerate"}
+        </Button>
       </div>
       {Array.from(keywordCategoryMap.entries()).map(
         ([category, keywords], index) => (

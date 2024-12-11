@@ -1,8 +1,8 @@
+import { addContextToPrompt } from "@/lib/add-context-to-prompt";
 import { getCoverLetter, updateCoverLetter } from "@/services/cover-letter";
 import { getResume } from "@/services/resume";
 import { getCurrentUser } from "@/services/user";
 import type { ChatMessage } from "@/types";
-import { addContextToPrompt } from "@/utils/addContextToPrompt";
 import { createOpenAI } from "@ai-sdk/openai";
 import { streamText } from "ai";
 

@@ -5,6 +5,7 @@ import { updateCoverLetter } from "@/services/cover-letter";
 import type { TypedCoverLetter } from "@/types";
 import { Check, Spinner } from "@phosphor-icons/react";
 import { Label } from "@radix-ui/react-label";
+import { useRouter } from "next/navigation";
 import { Textarea } from "../ui/textarea";
 
 export const StepJobDescription = ({
@@ -12,13 +13,17 @@ export const StepJobDescription = ({
 }: {
   coverLetter: TypedCoverLetter;
 }) => {
+  const router = useRouter();
   const { isLoading, success, handleBlur } = useBlurAction({
     action: async (value: string) => {
       await updateCoverLetter(coverLetter.id, {
         jobDescription: value,
       });
+      router.refresh();
     },
-    skipCondition: (value) => value === coverLetter.jobDescription,
+    skipCondition: (value) => {
+      return !value || value === coverLetter.jobDescription;
+    },
   });
 
   return (

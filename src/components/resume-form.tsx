@@ -1,7 +1,7 @@
 "use client";
 
-import { saveResume } from "@/actions/resume";
 import { useToast } from "@/hooks/use-toast";
+import { updateResume } from "@/services/resume";
 import type { Resume } from "@prisma/client";
 import Form from "next/form";
 import { useActionState, useEffect, useState } from "react";
@@ -16,7 +16,7 @@ export const ResumeForm = ({
 }) => {
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const { toast } = useToast();
-  const [state, formAction, isPending] = useActionState(saveResume, null);
+  const [state, formAction, isPending] = useActionState(updateResume, null);
 
   useEffect(() => {
     if (state && hasSubmitted) {

@@ -1,11 +1,13 @@
 "use client";
+
 import { useBlurAction } from "@/hooks/use-blur-action";
 import { useLLMSettings } from "@/hooks/use-llm-settings";
 import { generateJobInfo, updateCoverLetter } from "@/services/cover-letter";
 import type { TypedCoverLetter } from "@/types";
 import { Check, Spinner } from "@phosphor-icons/react";
-import { Label } from "@radix-ui/react-label";
+import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import { Label } from "../ui/label";
 import { Textarea } from "../ui/textarea";
 
 export const StepCompanyInfo = ({
@@ -13,21 +15,26 @@ export const StepCompanyInfo = ({
 }: {
   coverLetter: TypedCoverLetter;
 }) => {
+  const router = useRouter();
   const { llmSettings } = useLLMSettings();
+
+  useEffect(() => {
+    if (!coverLetter.jobInfo) {
+      generateJobInfo(coverLetter.id, llmSettings.jobInfoPrompt).finally(() => {
+        router.refresh();
+      });
+    }
+  }, [coverLetter.jobInfo, coverLetter.id, llmSettings.jobInfoPrompt, router]);
+
   const { isLoading, success, handleBlur } = useBlurAction({
     action: async (value: string) => {
       await updateCoverLetter(coverLetter.id, {
         companyInfo: value,
       });
+      router.refresh();
     },
     skipCondition: (value) => value === coverLetter.companyInfo,
   });
-
-  useEffect(() => {
-    if (!coverLetter.jobInfo) {
-      generateJobInfo(coverLetter.id, llmSettings.jobInfoPrompt);
-    }
-  }, [coverLetter.jobInfo, generateJobInfo]);
 
   return (
     <div className="flex flex-col gap-2 p-6 h-full">

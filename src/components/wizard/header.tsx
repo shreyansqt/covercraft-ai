@@ -1,11 +1,21 @@
+"use client";
+import { deleteCoverLetter } from "@/services/cover-letter";
 import type { TypedCoverLetter } from "@/types";
+import { Trash } from "@phosphor-icons/react/dist/ssr";
+import { useRouter } from "next/navigation";
 import { Header } from "../header";
+import { Button } from "../ui/button";
 
 export const CoverLetterHeader = ({
   coverLetter,
 }: {
   coverLetter: TypedCoverLetter;
 }) => {
+  const router = useRouter();
+  const onDelete = async () => {
+    await deleteCoverLetter(coverLetter.id);
+    router.refresh();
+  };
   return (
     <Header>
       <div className="flex justify-between items-center">
@@ -17,11 +27,16 @@ export const CoverLetterHeader = ({
             {coverLetter.jobInfo?.companyName || "Unknown company"}
           </p>
         </div>
-        {coverLetter.jobInfo?.matchScore && (
-          <p className="font-bold text-muted-foreground text-xl">
-            {coverLetter.jobInfo.matchScore}% match
-          </p>
-        )}
+        <div className="flex items-center gap-4">
+          {coverLetter.jobInfo?.matchScore && (
+            <p className="font-bold text-muted-foreground text-xl">
+              {coverLetter.jobInfo.matchScore}% match
+            </p>
+          )}
+          <Button onClick={onDelete} variant="outline" size="icon">
+            <Trash className="size-4" weight="duotone" />
+          </Button>
+        </div>
       </div>
     </Header>
   );

@@ -10,7 +10,6 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { getCoverLetters } from "@/services/cover-letter";
-import { getCurrentUser } from "@/services/user";
 import { CaretCircleDown } from "@phosphor-icons/react/dist/ssr";
 import { AddCoverLetterButton } from "./add-cover-letter-button";
 import CoverLetterMenuItem from "./cover-letter-menu-item";
@@ -23,11 +22,7 @@ import {
 } from "./ui/collapsible";
 
 export async function AppSidebar() {
-  const user = await getCurrentUser();
-  if (!user) {
-    throw new Error("Not authenticated");
-  }
-  const coverLetters = await getCoverLetters(user);
+  const coverLetters = await getCoverLetters();
 
   return (
     <Sidebar className="border-r">

@@ -1,6 +1,5 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import type { Keyword as TKeyword } from "@/types";
 import { Check, Plus } from "@phosphor-icons/react";
 import { useOptimistic, useTransition } from "react";
@@ -13,7 +12,7 @@ export const Keyword = ({
   keyword: TKeyword;
   updateKeyword: (keyword: TKeyword) => Promise<void>;
 }) => {
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const [optimisticKeyword, setOptimisticKeyword] = useOptimistic(keyword);
 
   const handleClick = () => {
@@ -28,7 +27,6 @@ export const Keyword = ({
     <MyBadge
       variant={optimisticKeyword.selected ? "default" : "outline"}
       onClick={handleClick}
-      className={cn(isPending && "pointer-events-none opacity-50")}
     >
       {optimisticKeyword.selected ? (
         <Check className="size-3.5" />

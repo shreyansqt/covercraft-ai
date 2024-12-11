@@ -8,8 +8,10 @@ import { Input } from "../ui/input";
 
 export const DownloadForm = ({
   coverLetter,
+  disabled,
 }: {
   coverLetter: TypedCoverLetter;
+  disabled: boolean;
 }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [fileName, setFileName] = useLocalStorage(
@@ -53,8 +55,14 @@ export const DownloadForm = ({
         onChange={(e) => setFileName(e.target.value)}
         placeholder="Enter a file name"
         className="w-[300px]"
+        disabled={disabled}
       />
-      <Button type="submit" className="ml-auto" disabled={isLoading} size="sm">
+      <Button
+        type="submit"
+        className="ml-auto"
+        disabled={isLoading || disabled}
+        size="sm"
+      >
         {isLoading ? (
           <SpinnerGap className="animate-spin size-4" />
         ) : (
