@@ -1,7 +1,7 @@
 "use client";
 
 import { useToast } from "@/hooks/use-toast";
-import { getStepPath } from "@/lib/utils";
+import { getCurrentStepPath } from "@/lib/steps";
 import { createCoverLetter } from "@/services/cover-letter";
 import { FilePlus } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
@@ -15,7 +15,7 @@ export const AddCoverLetterButton = () => {
   const handleButtonClick = async () => {
     setIsLoading(true);
     const coverLetter = await createCoverLetter();
-    router.push(getStepPath(coverLetter));
+    router.push(getCurrentStepPath(coverLetter));
     toast({
       title: "Cover letter created",
       description: "You can start by entering the job description",

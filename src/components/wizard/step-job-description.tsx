@@ -1,26 +1,39 @@
 "use client";
-import { useCoverLetter } from "@/hooks/use-cover-letter";
+
+import { useBlurAction } from "@/hooks/use-blur-action";
+import { updateCoverLetter } from "@/services/cover-letter";
+import type { TypedCoverLetter } from "@/types";
+import { Check, Spinner } from "@phosphor-icons/react";
 import { Label } from "@radix-ui/react-label";
 import { Textarea } from "../ui/textarea";
 
-export const StepJobDescription = ({ id }: { id: string }) => {
-  const { coverLetter, updateCoverLetter } = useCoverLetter(id);
-
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    updateCoverLetter({
-      jobDescription: e.target.value,
-    });
-  };
+export const StepJobDescription = ({
+  coverLetter,
+}: {
+  coverLetter: TypedCoverLetter;
+}) => {
+  const { isLoading, success, handleBlur } = useBlurAction({
+    action: async (value: string) => {
+      await updateCoverLetter(coverLetter.id, {
+        jobDescription: value,
+      });
+    },
+    skipCondition: (value) => value === coverLetter.jobDescription,
+  });
 
   return (
     <div className="flex flex-col gap-2 p-6 h-full">
-      <Label htmlFor="jobDescription">Enter Job Description</Label>
+      <div className="flex items-center gap-2">
+        <Label htmlFor="jobDescription">Enter Job Description</Label>
+        {isLoading && <Spinner className="animate-spin" />}
+        {success && <Check />}
+      </div>
       <Textarea
         id="jobDescription"
         placeholder="Paste the job description here..."
-        value={coverLetter.jobDescription}
-        onChange={handleChange}
-        className="flex-1 resize-none"
+        defaultValue={coverLetter.jobDescription || ""}
+        onBlur={handleBlur}
+        className="h-full resize-none"
       />
     </div>
   );

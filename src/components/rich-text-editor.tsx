@@ -14,10 +14,10 @@ import { EditorLinkToggle } from "./EditorLinkToggle";
 
 export const RichTextEditor = ({
   value,
-  onChange,
+  onBlur,
 }: {
   value: string;
-  onChange: (value: string) => void;
+  onBlur: (value: string) => void;
 }) => {
   const editor = useEditor({
     immediatelyRender: false,
@@ -55,8 +55,8 @@ export const RichTextEditor = ({
       }),
     ],
     content: value,
-    onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
+    onBlur: ({ editor }) => {
+      onBlur(editor.getHTML());
     },
   });
 

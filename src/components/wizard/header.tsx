@@ -1,10 +1,11 @@
-"use client";
-
-import { useCoverLetter } from "@/hooks/use-cover-letter";
+import type { TypedCoverLetter } from "@/types";
 import { Header } from "../header";
 
-export const CoverLetterHeader = ({ id }: { id: string }) => {
-  const { coverLetter } = useCoverLetter(id);
+export const CoverLetterHeader = ({
+  coverLetter,
+}: {
+  coverLetter: TypedCoverLetter;
+}) => {
   return (
     <Header>
       <div className="flex justify-between items-center">

@@ -1,6 +1,11 @@
 "use client";
-import { useCoverLetter } from "@/hooks/use-cover-letter";
+import { useLLMSettings } from "@/hooks/use-llm-settings";
 import { cn } from "@/lib/utils";
+import {
+  generateCoverLetter,
+  updateCoverLetter,
+} from "@/services/cover-letter";
+import type { TypedCoverLetter } from "@/types";
 import { ArrowsClockwise } from "@phosphor-icons/react";
 import { Label } from "@radix-ui/react-label";
 import { useCallback, useEffect, useState } from "react";
@@ -8,25 +13,29 @@ import { RichTextEditor } from "../rich-text-editor";
 import { Button } from "../ui/button";
 import { DownloadForm } from "./download-form";
 
-export const StepReview = ({ id }: { id: string }) => {
-  const { coverLetter, updateCoverLetter, fetchCoverLetter } =
-    useCoverLetter(id);
+export const StepReview = ({
+  coverLetter,
+}: {
+  coverLetter: TypedCoverLetter;
+}) => {
+  const { llmSettings } = useLLMSettings();
   const [isLoading, setIsLoading] = useState(false);
 
   const generate = useCallback(async () => {
     setIsLoading(true);
-    await fetchCoverLetter();
+    await generateCoverLetter(coverLetter.id, llmSettings.coverLetterPrompt);
     setIsLoading(false);
-  }, [fetchCoverLetter]);
+  }, [generateCoverLetter]);
 
   useEffect(() => {
-    if (coverLetter.content === undefined) {
+    if (!coverLetter.content) {
       generate();
     }
   }, [generate, coverLetter.content]);
 
-  const handleChange = (value: string) => {
-    updateCoverLetter({
+  const handleBlur = (value: string) => {
+    if (value === coverLetter.content) return;
+    updateCoverLetter(coverLetter.id, {
       content: value,
     });
   };
@@ -59,7 +68,7 @@ export const StepReview = ({ id }: { id: string }) => {
         <div className="flex flex-col flex-1">
           <RichTextEditor
             value={coverLetter.content || ""}
-            onChange={handleChange}
+            onBlur={handleBlur}
           />
         </div>
       )}

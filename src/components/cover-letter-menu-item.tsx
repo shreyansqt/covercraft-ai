@@ -1,5 +1,5 @@
 "use client";
-import { getStepPath } from "@/lib/utils";
+import { getCurrentStepPath } from "@/lib/steps";
 import { deleteCoverLetter } from "@/services/cover-letter";
 import type { TypedCoverLetter } from "@/types";
 import { Trash } from "@phosphor-icons/react";
@@ -22,7 +22,7 @@ export const CoverLetterMenuItem = ({
   const params = useParams();
   const router = useRouter();
 
-  const href = getStepPath(coverLetter);
+  const href = getCurrentStepPath(coverLetter);
   const isActive = params.id === coverLetter.id;
 
   const onDelete = () => {
