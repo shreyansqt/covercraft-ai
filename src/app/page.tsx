@@ -1,8 +1,6 @@
 import { auth } from "@/auth";
 import { Logo } from "@/components/logo";
 import { SignIn } from "@/components/sign-in";
-import { SignOut } from "@/components/sign-out";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import {
@@ -76,14 +74,9 @@ export default async function LandingPage() {
             </a>
             {session ? (
               <>
-                <Avatar>
-                  <AvatarImage
-                    src={session.user?.image ?? ""}
-                    referrerPolicy="no-referrer"
-                  />
-                  <AvatarFallback>{session.user?.name?.[0]}</AvatarFallback>
-                </Avatar>
-                <SignOut />
+                <Button variant="outline" asChild>
+                  <Link href="/app">Go to app</Link>
+                </Button>
               </>
             ) : (
               <SignIn />

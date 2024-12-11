@@ -1,3 +1,4 @@
+import { signOut } from "@/auth";
 import {
   Sidebar,
   SidebarContent,
@@ -7,19 +8,39 @@ import {
   SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { getCoverLetters } from "@/services/cover-letter";
-import { CaretCircleDown } from "@phosphor-icons/react/dist/ssr";
+import {
+  CaretCircleDown,
+  SignOut,
+  Sparkle,
+  UserSquare,
+} from "@phosphor-icons/react/dist/ssr";
 import { AddCoverLetterButton } from "./add-cover-letter-button";
 import CoverLetterMenuItem from "./cover-letter-menu-item";
 import { Logo } from "./logo";
-import { SettingsMenu } from "./settings-menu";
+import { SettingsMenuItem } from "./settings-menu-item";
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from "./ui/collapsible";
+
+const settingsMenuItems = [
+  {
+    label: "Resume",
+    href: "/app/settings/resume",
+    icon: <UserSquare className="size-4" weight="duotone" />,
+  },
+  {
+    label: "LLM",
+    href: "/app/settings/llm",
+    icon: <Sparkle className="size-4" weight="duotone" />,
+  },
+];
 
 export async function AppSidebar() {
   const coverLetters = await getCoverLetters();
@@ -57,7 +78,29 @@ export async function AppSidebar() {
             </SidebarGroupLabel>
             <CollapsibleContent>
               <SidebarGroupContent>
-                <SettingsMenu />
+                <SidebarMenu>
+                  {settingsMenuItems.map(({ label, href, icon: Icon }) => (
+                    <SettingsMenuItem
+                      key={href}
+                      label={label}
+                      href={href}
+                      icon={Icon}
+                    />
+                  ))}
+                  <SidebarMenuItem>
+                    <form
+                      action={async () => {
+                        "use server";
+                        await signOut();
+                      }}
+                    >
+                      <SidebarMenuButton type="submit">
+                        <SignOut className="size-4" weight="duotone" />
+                        <span>Sign Out</span>
+                      </SidebarMenuButton>
+                    </form>
+                  </SidebarMenuItem>
+                </SidebarMenu>
               </SidebarGroupContent>
             </CollapsibleContent>
           </SidebarGroup>
