@@ -1,7 +1,6 @@
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_URL")
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
@@ -24,7 +23,8 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  resumes Resume[]
+  resumes      Resume[]
+  coverLetters CoverLetter[]
 }
 
 model Account {
@@ -90,4 +90,18 @@ model Resume {
   updatedAt DateTime @updatedAt
   userId    String
   user      User     @relation(fields: [userId], references: [id])
+}
+
+model CoverLetter {
+  id             String   @id @default(cuid())
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  userId         String
+  user           User     @relation(fields: [userId], references: [id])
+  jobDescription String?
+  jobInfo        Json?
+  companyInfo    String?
+  keywords       Json[]   @default([])
+  content        String?
+  chat           Json[]   @default([])
 }

@@ -1,17 +1,9 @@
 import { Header } from "@/components/header";
 import { ResumeForm } from "@/components/resume-form";
-import { prisma } from "@/prisma";
-import { getCurrentUser } from "@/services/user";
+import { getResume } from "@/services/resume";
 
 export default async function ResumePage() {
-  const user = await getCurrentUser();
-  if (!user) return <div>Not authenticated</div>;
-
-  const resume = await prisma.resume.findFirst({
-    where: {
-      userId: user.id,
-    },
-  });
+  const resume = await getResume();
 
   return (
     <div className="flex flex-col h-full">

@@ -85,4 +85,14 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+
+  .prose {
+    hr {
+      @apply border-gray-300 my-4;
+    }
+
+    blockquote {
+      @apply text-muted-foreground border-l-2 border-gray-300 pl-4;
+    }
+  }
 }

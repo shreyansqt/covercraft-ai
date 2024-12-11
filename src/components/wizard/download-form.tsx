@@ -1,4 +1,4 @@
-import type { CoverLetter } from "@/types";
+import type { TypedCoverLetter } from "@/types";
 import { Download, SpinnerGap } from "@phosphor-icons/react";
 import { Label } from "@radix-ui/react-label";
 import { useState } from "react";
@@ -6,7 +6,13 @@ import { useLocalStorage } from "usehooks-ts";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 
-export const DownloadForm = ({ coverLetter }: { coverLetter: CoverLetter }) => {
+export const DownloadForm = ({
+  coverLetter,
+  disabled,
+}: {
+  coverLetter: TypedCoverLetter;
+  disabled: boolean;
+}) => {
   const [isLoading, setIsLoading] = useState(false);
   const [fileName, setFileName] = useLocalStorage(
     "cover-letter-file-name",
@@ -49,8 +55,14 @@ export const DownloadForm = ({ coverLetter }: { coverLetter: CoverLetter }) => {
         onChange={(e) => setFileName(e.target.value)}
         placeholder="Enter a file name"
         className="w-[300px]"
+        disabled={disabled}
       />
-      <Button type="submit" className="ml-auto" disabled={isLoading} size="sm">
+      <Button
+        type="submit"
+        className="ml-auto"
+        disabled={isLoading || disabled}
+        size="sm"
+      >
         {isLoading ? (
           <SpinnerGap className="animate-spin size-4" />
         ) : (

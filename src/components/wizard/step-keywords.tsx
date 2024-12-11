@@ -1,27 +1,53 @@
 "use client";
-import { useCoverLetter } from "@/hooks/use-cover-letter";
+import { useLLMSettings } from "@/hooks/use-llm-settings";
 import { cn } from "@/lib/utils";
-import type { SelectedKeyword } from "@/types";
-import { ArrowsClockwise, Check, Plus } from "@phosphor-icons/react";
-import { useEffect } from "react";
-import { MyBadge } from "../my-badge";
+import { generateKeywords, updateCoverLetter } from "@/services/cover-letter";
+import type { Keyword as TKeyword, TypedCoverLetter } from "@/types";
+import { ArrowsClockwise, Spinner } from "@phosphor-icons/react";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useTransition } from "react";
+import { Keyword } from "../keyword";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 
-export const StepKeywords = ({ id }: { id: string }) => {
-  const { coverLetter, updateCoverLetter, fetchKeywords, fetchingKeywords } =
-    useCoverLetter(id);
+export const StepKeywords = ({
+  coverLetter,
+}: {
+  coverLetter: TypedCoverLetter;
+}) => {
+  const router = useRouter();
+  const { llmSettings } = useLLMSettings();
 
-  const keywordCategoryMap = new Map<string, SelectedKeyword[]>();
+  const [isLoading, startTransition] = useTransition();
+
+  const generate = useCallback(async () => {
+    startTransition(async () => {
+      await generateKeywords(coverLetter.id, llmSettings.keywordsPrompt);
+      router.refresh();
+    });
+  }, [coverLetter.id, llmSettings.keywordsPrompt, router]);
 
   useEffect(() => {
-    if (!coverLetter.keywords || coverLetter.keywords.length === 0) {
-      fetchKeywords();
+    if (coverLetter.keywords.length === 0) {
+      generate();
     }
-  }, [coverLetter.keywords, fetchKeywords]);
+  }, [generate, coverLetter.keywords.length]);
 
-  if (!coverLetter.keywords) return null;
+  const updateKeyword = async (newKeyword: TKeyword) => {
+    if (!coverLetter.keywords) return;
+    const index = coverLetter.keywords.findIndex(
+      (k) => k.name === newKeyword.name
+    );
+    const newKeywords = [...coverLetter.keywords];
+    newKeywords[index] = newKeyword;
+    await updateCoverLetter(coverLetter.id, {
+      keywords: newKeywords,
+    });
+    router.refresh();
+  };
 
+  // create map for rendering keywords in categories
+  const keywordCategoryMap = new Map<string, TKeyword[]>();
   for (const keyword of coverLetter.keywords) {
     keywordCategoryMap.set(keyword.category, [
       ...(keywordCategoryMap.get(keyword.category) || []),
@@ -29,36 +55,25 @@ export const StepKeywords = ({ id }: { id: string }) => {
     ]);
   }
 
-  const toggleKeywordSelection = (keyword: SelectedKeyword) => {
-    if (!coverLetter.keywords) return;
-    const index = coverLetter.keywords.findIndex(
-      (k) => k.name === keyword.name
-    );
-    const newKeyword = { ...keyword, selected: !keyword.selected };
-    updateCoverLetter((coverLetter) => {
-      if (!coverLetter.keywords) return coverLetter;
-      const keywords = [...coverLetter.keywords];
-      keywords[index] = newKeyword;
-      return { keywords };
-    });
-  };
-
   return (
     <div className="p-6 h-full">
       <div className="flex justify-between items-center mb-4">
-        <Label>Select Relevant Keywords</Label>
+        <div className="flex items-center gap-2">
+          <Label>Select Relevant Keywords</Label>
+          {isLoading && <Spinner className="animate-spin" />}
+        </div>
         <Button
           variant="outline"
           size="sm"
-          onClick={fetchKeywords}
+          onClick={generate}
           className="flex items-center gap-2"
-          disabled={fetchingKeywords}
+          disabled={isLoading}
         >
           <ArrowsClockwise
-            className={cn("w-4 h-4", fetchingKeywords && "animate-spin")}
+            className={cn("w-4 h-4", isLoading && "animate-spin")}
             weight="duotone"
           />
-          {fetchingKeywords ? "Regenerating..." : "Regenerate"}
+          {isLoading ? "Regenerating..." : "Regenerate"}
         </Button>
       </div>
       {Array.from(keywordCategoryMap.entries()).map(
@@ -67,20 +82,11 @@ export const StepKeywords = ({ id }: { id: string }) => {
             <h3 className="mb-2 text-sm">{category}</h3>
             <div className="flex flex-wrap gap-2">
               {keywords.map((keyword, index) => (
-                <MyBadge
+                <Keyword
                   key={index}
-                  variant={keyword.selected ? "default" : "outline"}
-                  onClick={() => {
-                    toggleKeywordSelection(keyword);
-                  }}
-                >
-                  {keyword.selected ? (
-                    <Check className="size-3.5" />
-                  ) : (
-                    <Plus className="size-3.5" />
-                  )}
-                  {keyword.name}
-                </MyBadge>
+                  keyword={keyword}
+                  updateKeyword={updateKeyword}
+                />
               ))}
             </div>
           </div>

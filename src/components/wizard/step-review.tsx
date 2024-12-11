@@ -1,43 +1,58 @@
 "use client";
-import { useCoverLetter } from "@/hooks/use-cover-letter";
-import { cn } from "@/lib/utils";
-import { ArrowsClockwise } from "@phosphor-icons/react";
+import { useLLMSettings } from "@/hooks/use-llm-settings";
+import {
+  generateCoverLetter,
+  updateCoverLetter,
+} from "@/services/cover-letter";
+import type { TypedCoverLetter } from "@/types";
+import { ArrowsClockwise, Spinner } from "@phosphor-icons/react";
 import { Label } from "@radix-ui/react-label";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { RichTextEditor } from "../rich-text-editor";
 import { Button } from "../ui/button";
 import { DownloadForm } from "./download-form";
 
-export const StepReview = ({ id }: { id: string }) => {
-  const { coverLetter, updateCoverLetter, fetchCoverLetter } =
-    useCoverLetter(id);
+export const StepReview = ({
+  coverLetter,
+}: {
+  coverLetter: TypedCoverLetter;
+}) => {
+  const router = useRouter();
+  const { llmSettings } = useLLMSettings();
   const [isLoading, setIsLoading] = useState(false);
 
   const generate = useCallback(async () => {
     setIsLoading(true);
-    await fetchCoverLetter();
+    await generateCoverLetter(coverLetter.id, llmSettings.coverLetterPrompt);
     setIsLoading(false);
-  }, [fetchCoverLetter]);
+    router.refresh();
+  }, [llmSettings.coverLetterPrompt, coverLetter.id, router]);
 
   useEffect(() => {
-    if (coverLetter.content === undefined) {
+    if (!coverLetter.content) {
       generate();
     }
   }, [generate, coverLetter.content]);
 
-  const handleChange = (value: string) => {
-    updateCoverLetter({
+  const handleBlur = async (value: string) => {
+    if (value === coverLetter.content) return;
+    await updateCoverLetter(coverLetter.id, {
       content: value,
     });
+    router.refresh();
   };
 
   return (
     <div className="flex flex-col gap-4 p-6 h-full">
       <div className="flex justify-between items-center">
-        <Label htmlFor="coverLetter">Generated Cover Letter</Label>
+        <div className="flex items-center gap-2">
+          <Label htmlFor="coverLetter">Generated Cover Letter</Label>
+          {isLoading && <Spinner className="animate-spin" />}
+        </div>
 
         <div className="flex items-center gap-2">
-          <DownloadForm coverLetter={coverLetter} />
+          <DownloadForm coverLetter={coverLetter} disabled={isLoading} />
           <Button
             variant="outline"
             size="sm"
@@ -45,23 +60,18 @@ export const StepReview = ({ id }: { id: string }) => {
             disabled={isLoading}
             className="flex items-center gap-2"
           >
-            <ArrowsClockwise
-              className={cn("w-4 h-4", isLoading && "animate-spin")}
-              weight="duotone"
-            />
-            {isLoading ? "Regenerating..." : "Regenerate"}
+            <ArrowsClockwise weight="duotone" />
+            Regenerate
           </Button>
         </div>
       </div>
-      {isLoading ? (
-        <div>Loading...</div>
-      ) : (
-        <div className="flex flex-col flex-1">
-          <RichTextEditor
-            value={coverLetter.content || ""}
-            onChange={handleChange}
-          />
-        </div>
+      {coverLetter.content && (
+        <RichTextEditor
+          value={coverLetter.content}
+          onBlur={handleBlur}
+          disabled={isLoading}
+          className="flex-1"
+        />
       )}
     </div>
   );

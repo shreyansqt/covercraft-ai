@@ -1,16 +1,30 @@
 "use server";
 
 import { prisma } from "@/prisma";
-import { getCurrentUser } from "@/services/user";
 import { revalidatePath } from "next/cache";
+import { getCurrentUser } from "./user";
 
-export type SaveResumeState = {
+export const getResume = async () => {
+  const user = await getCurrentUser();
+  if (!user) {
+    throw new Error("Not authenticated");
+  }
+  const resume = await prisma.resume.findFirst({
+    where: {
+      userId: user.id,
+    },
+  });
+
+  return resume;
+};
+
+export type UpdateResumeState = {
   error: Error | null;
   message: string | null;
 };
 
-export const saveResume = async (
-  previousState: SaveResumeState | null,
+export const updateResume = async (
+  previousState: UpdateResumeState | null,
   formData: FormData
 ) => {
   try {

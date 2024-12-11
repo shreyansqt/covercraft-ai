@@ -1,6 +1,7 @@
 "use client";
 import { Separator } from "@/components/ui/separator";
 import { Toggle } from "@/components/ui/toggle";
+import { cn } from "@/lib/utils";
 import {
   ListBullets,
   ListNumbers,
@@ -8,16 +9,20 @@ import {
   TextItalic,
 } from "@phosphor-icons/react";
 import Link from "@tiptap/extension-link";
-import { EditorContent, useEditor, type Editor } from "@tiptap/react";
+import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { EditorLinkToggle } from "./EditorLinkToggle";
 
 export const RichTextEditor = ({
   value,
-  onChange,
+  onBlur,
+  disabled,
+  className,
 }: {
   value: string;
-  onChange: (value: string) => void;
+  onBlur: (value: string) => void;
+  disabled?: boolean;
+  className?: string;
 }) => {
   const editor = useEditor({
     immediatelyRender: false,
@@ -55,56 +60,61 @@ export const RichTextEditor = ({
       }),
     ],
     content: value,
-    onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
+    onBlur: ({ editor }) => {
+      onBlur(editor.getHTML());
     },
+    editable: !disabled,
   });
 
-  return (
-    <>
-      <EditorContent editor={editor} className="flex-1 h-full" />
-      {editor ? <RichTextEditorToolbar editor={editor} /> : null}
-    </>
-  );
-};
+  if (!editor) return null;
 
-const RichTextEditorToolbar = ({ editor }: { editor: Editor }) => {
   return (
-    <div className="flex flex-row items-center gap-1 border-input bg-transparent p-1 border rounded-bl-md rounded-br-md">
-      <Toggle
-        size="sm"
-        pressed={editor.isActive("bold")}
-        onPressedChange={() => editor.chain().focus().toggleBold().run()}
-        aria-label="Bold"
-      >
-        <TextB className="size-4" weight="duotone" />
-      </Toggle>
-      <Toggle
-        size="sm"
-        pressed={editor.isActive("italic")}
-        onPressedChange={() => editor.chain().focus().toggleItalic().run()}
-        aria-label="Italic"
-      >
-        <TextItalic className="size-4" weight="duotone" />
-      </Toggle>
-      <Separator orientation="vertical" className="w-[1px] h-8" />
-      <Toggle
-        size="sm"
-        pressed={editor.isActive("bulletList")}
-        onPressedChange={() => editor.chain().focus().toggleBulletList().run()}
-        aria-label="Bullet List"
-      >
-        <ListBullets className="size-4" weight="duotone" />
-      </Toggle>
-      <Toggle
-        size="sm"
-        pressed={editor.isActive("orderedList")}
-        onPressedChange={() => editor.chain().focus().toggleOrderedList().run()}
-        aria-label="Ordered List"
-      >
-        <ListNumbers className="size-4" weight="duotone" />
-      </Toggle>
-      <EditorLinkToggle editor={editor} />
+    <div className={cn("flex flex-col", className)}>
+      <EditorContent
+        editor={editor}
+        className="flex-1 h-full"
+        disabled={disabled}
+      />
+      <div className="flex flex-row items-center gap-1 border-input bg-transparent p-1 border rounded-bl-md rounded-br-md">
+        <Toggle
+          size="sm"
+          pressed={editor.isActive("bold")}
+          onPressedChange={() => editor.chain().focus().toggleBold().run()}
+          aria-label="Bold"
+        >
+          <TextB className="size-4" weight="duotone" />
+        </Toggle>
+        <Toggle
+          size="sm"
+          pressed={editor.isActive("italic")}
+          onPressedChange={() => editor.chain().focus().toggleItalic().run()}
+          aria-label="Italic"
+        >
+          <TextItalic className="size-4" weight="duotone" />
+        </Toggle>
+        <Separator orientation="vertical" className="w-[1px] h-8" />
+        <Toggle
+          size="sm"
+          pressed={editor.isActive("bulletList")}
+          onPressedChange={() =>
+            editor.chain().focus().toggleBulletList().run()
+          }
+          aria-label="Bullet List"
+        >
+          <ListBullets className="size-4" weight="duotone" />
+        </Toggle>
+        <Toggle
+          size="sm"
+          pressed={editor.isActive("orderedList")}
+          onPressedChange={() =>
+            editor.chain().focus().toggleOrderedList().run()
+          }
+          aria-label="Ordered List"
+        >
+          <ListNumbers className="size-4" weight="duotone" />
+        </Toggle>
+        <EditorLinkToggle editor={editor} />
+      </div>
     </div>
   );
 };

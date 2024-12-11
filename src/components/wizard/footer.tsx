@@ -1,25 +1,34 @@
 "use client";
 
-import { useCoverLetter } from "@/hooks/use-cover-letter";
-import { useStep } from "@/hooks/use-step";
+import {
+  canGoToStep,
+  getStepIndex,
+  goToNextStep,
+  goToPreviousStep,
+  steps,
+  type Step,
+} from "@/lib/steps";
+import type { TypedCoverLetter } from "@/types";
 import { ArrowLeft } from "@phosphor-icons/react";
 import { Button } from "../ui/button";
 
-export const CoverLetterFooter = ({ id }: { id: string }) => {
-  const { coverLetter } = useCoverLetter(id);
-  const { steps, getStepIndex, goToPreviousStep, goToNextStep, canGoToStep } =
-    useStep();
+export const CoverLetterFooter = ({
+  coverLetter,
+  activeStep,
+}: {
+  coverLetter: TypedCoverLetter;
+  activeStep: Step;
+}) => {
+  const activeStepIndex = getStepIndex(activeStep);
 
-  const currentStepIndex = getStepIndex(coverLetter.currentStep);
-
-  const nextStep = steps[currentStepIndex + 1];
+  const nextStep = steps[activeStepIndex + 1];
 
   return (
     <footer className="flex px-6 py-4 border-t">
-      {currentStepIndex > 0 && (
+      {activeStepIndex > 0 && (
         <Button
           variant="ghost"
-          onClick={() => goToPreviousStep(id, coverLetter.currentStep)}
+          onClick={() => goToPreviousStep(coverLetter.id, activeStep)}
           size="icon"
         >
           <ArrowLeft className="w-4 h-4" weight="duotone" />
@@ -27,9 +36,9 @@ export const CoverLetterFooter = ({ id }: { id: string }) => {
         </Button>
       )}
 
-      {currentStepIndex < steps.length - 1 && (
+      {activeStepIndex < steps.length - 1 && (
         <Button
-          onClick={() => goToNextStep(id, coverLetter.currentStep)}
+          onClick={() => goToNextStep(coverLetter.id, activeStep)}
           className="ml-auto"
           disabled={!canGoToStep(nextStep, coverLetter)}
         >
