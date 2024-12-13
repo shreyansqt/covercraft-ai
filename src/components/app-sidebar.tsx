@@ -13,16 +13,19 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { getCoverLetters } from "@/services/cover-letter";
+import {} from "@phosphor-icons/react";
 import {
-  CaretCircleDown,
+  CaretCircleUp,
   SignOut,
   Sparkle,
   UserSquare,
 } from "@phosphor-icons/react/dist/ssr";
+import type { User } from "@prisma/client";
 import { AddCoverLetterButton } from "./add-cover-letter-button";
 import CoverLetterMenuItem from "./cover-letter-menu-item";
 import { Logo } from "./logo";
 import { SettingsMenuItem } from "./settings-menu-item";
+import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import {
   Collapsible,
   CollapsibleContent,
@@ -36,13 +39,13 @@ const settingsMenuItems = [
     icon: <UserSquare className="size-4" weight="duotone" />,
   },
   {
-    label: "LLM",
+    label: "Prompts",
     href: "/app/settings/llm",
     icon: <Sparkle className="size-4" weight="duotone" />,
   },
 ];
 
-export async function AppSidebar() {
+export async function AppSidebar({ user }: { user: User }) {
   const coverLetters = await getCoverLetters();
 
   return (
@@ -52,7 +55,7 @@ export async function AppSidebar() {
           <Logo href="/app" size="sm" />
           <SidebarTrigger />
         </div>
-        <AddCoverLetterButton />
+        <AddCoverLetterButton className="w-full" />
       </SidebarHeader>
       <SidebarContent>
         <SidebarMenu>
@@ -65,13 +68,29 @@ export async function AppSidebar() {
         </SidebarMenu>
       </SidebarContent>
       <SidebarFooter>
-        <Collapsible defaultOpen className="group/collapsible">
+        <Collapsible className="group/collapsible">
           <SidebarGroup>
             <SidebarGroupLabel asChild>
-              <CollapsibleTrigger className="text-muted-foreground">
-                Settings
-                <CaretCircleDown
-                  className="group-data-[state=open]/collapsible:rotate-180 ml-auto text-muted-foreground transition-transform"
+              <CollapsibleTrigger className="py-2 h-auto">
+                <div className="flex items-center min-w-0">
+                  <Avatar className="bg-gray-200 size-8">
+                    <AvatarImage src={user.image || ""} />
+                    <AvatarFallback className="bg-gray-200">
+                      {user.name
+                        ?.split(" ")
+                        .map((name) => name[0])
+                        .join("")}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div className="flex flex-col px-2 min-w-0 text-left">
+                    <span className="text-sm">{user.name}</span>
+                    <span className="font-normal text-muted-foreground text-xs truncate">
+                      {user.email}
+                    </span>
+                  </div>
+                </div>
+                <CaretCircleUp
+                  className="group-data-[state=open]/collapsible:rotate-180 ml-auto text-muted-foreground"
                   weight="bold"
                 />
               </CollapsibleTrigger>

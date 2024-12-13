@@ -10,7 +10,7 @@ export default function LLMSettingsPage() {
   return (
     <div className="flex flex-col h-full">
       <Header>
-        <h1 className="font-semibold text-2xl">LLM Settings</h1>
+        <h1 className="font-semibold text-2xl">Prompts</h1>
       </Header>
 
       {Object.keys(llmSettings).map((key) => (

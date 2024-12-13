@@ -1,9 +1,11 @@
 "use client";
 
 import { useToast } from "@/hooks/use-toast";
+import { cn } from "@/lib/utils";
 import { updateResume } from "@/services/resume";
 import type { Resume } from "@prisma/client";
 import Form from "next/form";
+import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
@@ -11,9 +13,12 @@ import { Textarea } from "./ui/textarea";
 
 export const ResumeForm = ({
   currentResume,
+  className,
 }: {
   currentResume: Resume | null;
+  className?: string;
 }) => {
+  const router = useRouter();
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const { toast } = useToast();
   const [state, formAction, isPending] = useActionState(updateResume, null);
@@ -26,15 +31,16 @@ export const ResumeForm = ({
         variant: state?.error ? "destructive" : "default",
       });
       setHasSubmitted(false);
+      router.refresh();
     }
-  }, [state, toast, hasSubmitted]);
+  }, [state, toast, hasSubmitted, router]);
   return (
     <Form
       action={formAction}
       onSubmit={() => {
         setHasSubmitted(true);
       }}
-      className="flex flex-col flex-1 gap-4 p-6"
+      className={cn("flex flex-col gap-4", className)}
     >
       <Label htmlFor="content">Resume content</Label>
       <Textarea

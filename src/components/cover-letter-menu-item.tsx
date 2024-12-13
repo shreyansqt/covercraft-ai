@@ -30,7 +30,7 @@ export const CoverLetterMenuItem = ({
             <span className="text-muted-foreground text-xs">
               {coverLetter.jobInfo?.companyName || "Unknown company"}
             </span>
-            {coverLetter.jobInfo?.matchScore && (
+            {coverLetter.jobInfo?.matchScore !== undefined && (
               <MyBadge variant="secondary" size="sm">
                 {coverLetter.jobInfo?.matchScore}% match
               </MyBadge>

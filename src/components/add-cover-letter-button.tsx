@@ -2,17 +2,24 @@
 
 import { useToast } from "@/hooks/use-toast";
 import { getCurrentStepPath } from "@/lib/steps";
+import { cn } from "@/lib/utils";
 import { createCoverLetter } from "@/services/cover-letter";
-import { FilePlus } from "@phosphor-icons/react";
+import { FilePlus, Spinner } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { Button } from "./ui/button";
+import { Button, type ButtonProps } from "./ui/button";
 
-export const AddCoverLetterButton = () => {
+type Props = ButtonProps;
+
+export const AddCoverLetterButton = ({
+  className,
+  disabled,
+  ...restProps
+}: Props) => {
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const handleButtonClick = async () => {
+  const handleButtonClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
     setIsLoading(true);
     const coverLetter = await createCoverLetter();
     router.push(getCurrentStepPath(coverLetter));
@@ -23,8 +30,14 @@ export const AddCoverLetterButton = () => {
     setIsLoading(false);
   };
   return (
-    <Button onClick={handleButtonClick} className="w-full" disabled={isLoading}>
-      <FilePlus className="mr-2 w-4 h-4" weight="duotone" /> New Cover Letter
+    <Button
+      onClick={handleButtonClick}
+      className={cn(className)}
+      disabled={disabled || isLoading}
+      {...restProps}
+    >
+      {isLoading ? <Spinner className="animate-spin" /> : <FilePlus />}
+      New Cover Letter
     </Button>
   );
 };

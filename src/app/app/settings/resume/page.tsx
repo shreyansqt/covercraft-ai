@@ -10,7 +10,7 @@ export default async function ResumePage() {
       <Header>
         <h1 className="font-semibold text-2xl">Resume</h1>
       </Header>
-      <ResumeForm currentResume={resume} />
+      <ResumeForm currentResume={resume} className="flex-1 p-8" />
     </div>
   );
 }

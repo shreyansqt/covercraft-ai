@@ -1,26 +1,35 @@
-import { auth } from "@/auth";
+import { AddCoverLetterButton } from "@/components/add-cover-letter-button";
+import { ResumeForm } from "@/components/resume-form";
 import { SidebarButton } from "@/components/sidebar-button";
+import { getResume } from "@/services/resume";
+import { getCurrentUser } from "@/services/user";
 
 export default async function LandingPage() {
-  const session = await auth();
+  const user = await getCurrentUser();
+  if (!user) return <div>Not authenticated</div>;
+  const resume = await getResume();
   return (
-    <div className="relative flex flex-col justify-center items-center w-full min-h-screen">
+    <div className="relative h-screen">
       <SidebarButton />
-      <div className="space-y-16 px-4 py-16 max-w-3xl">
-        <div className="space-y-6">
-          <h1 className="mb-4 font-semibold text-3xl">
-            Welcome {session?.user?.name}!
-          </h1>
-          <h2 className="mb-4 font-semibold text-2xl">Get Started</h2>
-          <ol className="space-y-4 ml-4 list-decimal">
-            <li className="text-muted-foreground">
-              Go to Settings &gt; Resume and paste text from your resume
-            </li>
-            <li className="text-muted-foreground">
-              Click &quot;New Cover Letter&quot; and get started!
-            </li>
-          </ol>
-        </div>
+      <div className="flex flex-col gap-4 mx-auto px-8 pt-16 pb-8 max-w-[800px] h-full">
+        <h1 className="font-semibold text-3xl">Welcome {user.name}!</h1>
+        {resume?.content ? (
+          <>
+            <p className="text-muted-foreground">
+              Great! You have successfully added your resume.
+              <br />
+              Now you can create a new cover letter by clicking the button below
+            </p>
+            <AddCoverLetterButton size="lg" />
+          </>
+        ) : (
+          <>
+            <p className="text-muted-foreground">
+              Let&apos;s get started by providing your resume
+            </p>
+            <ResumeForm currentResume={resume} className="flex-1" />
+          </>
+        )}
       </div>
     </div>
   );
