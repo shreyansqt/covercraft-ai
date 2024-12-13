@@ -19,7 +19,7 @@ export const AddCoverLetterButton = ({
   const router = useRouter();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const handleButtonClick = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const handleButtonClick = async () => {
     setIsLoading(true);
     const coverLetter = await createCoverLetter();
     router.push(getCurrentStepPath(coverLetter));
