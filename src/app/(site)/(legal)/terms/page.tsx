@@ -9,9 +9,9 @@ export default function TermsPage() {
             1. Acceptance of Terms
           </h2>
           <p>
-            By accessing or using CoverCraft AI ("the Service"), you agree to be
-            bound by these Terms of Service. If you do not agree to these terms,
-            please do not use the Service.
+            By accessing or using CoverCraft AI (&quot;the Service&quot;), you
+            agree to be bound by these Terms of Service. If you do not agree to
+            these terms, please do not use the Service.
           </p>
         </section>
 
@@ -55,8 +55,8 @@ export default function TermsPage() {
             You retain ownership of any content you upload or generate using the
             Service. By using the Service, you grant us a non-exclusive license
             to store and process your content solely for the purpose of
-            providing the Service. We retain all rights to the Service's code,
-            features, and infrastructure.
+            providing the Service. We retain all rights to the Service&apos;s
+            code, features, and infrastructure.
           </p>
         </section>
 
@@ -77,10 +77,10 @@ export default function TermsPage() {
             7. Liability Disclaimer
           </h2>
           <p>
-            The Service is provided "as is" without warranties of any kind. We
-            are not liable for any damages, including but not limited to data
-            loss, service interruptions, or errors in generated content. You use
-            the Service at your own risk.
+            The Service is provided &quot;as is&quot; without warranties of any
+            kind. We are not liable for any damages, including but not limited
+            to data loss, service interruptions, or errors in generated content.
+            You use the Service at your own risk.
           </p>
         </section>
 
