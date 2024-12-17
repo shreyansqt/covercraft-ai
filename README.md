@@ -11,9 +11,6 @@ Visit [https://covercraftai.com/](https://covercraftai.com/) to start using Cove
 - 🤖 AI-powered cover letter generation using OpenAI's GPT-4
 - 📝 Multi-step wizard interface for easy cover letter creation
 - 🎯 Smart keyword extraction from job descriptions
-- 💾 Local storage persistence for managing multiple cover letters
-- 🎨 Clean, modern UI with dark mode support
-- 📱 Responsive design with mobile-friendly sidebar
 
 ## How It Works
 
