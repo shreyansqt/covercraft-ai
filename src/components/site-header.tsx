@@ -1,5 +1,6 @@
 import { auth } from "@/auth";
-import { GithubLogo, Link } from "@phosphor-icons/react/dist/ssr";
+import { GithubLogo } from "@phosphor-icons/react/dist/ssr";
+import Link from "next/link";
 import { Logo } from "./logo";
 import { SignIn } from "./sign-in";
 import { Button } from "./ui/button";
