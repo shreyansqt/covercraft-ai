@@ -1,5 +1,4 @@
 import { auth } from "@/auth";
-import { Logo } from "@/components/logo";
 import { SignIn } from "@/components/sign-in";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -8,7 +7,6 @@ import {
   EyeClosed,
   FilePdf,
   GearSix,
-  GithubLogo,
   MagicWand,
   PaintBrush,
 } from "@phosphor-icons/react/dist/ssr";
@@ -57,33 +55,6 @@ export default async function LandingPage() {
   const session = await auth();
   return (
     <>
-      <header className="top-0 z-10 sticky bg-background border-b">
-        <div className="flex justify-between items-center mx-auto py-4 container">
-          <div className="flex items-center gap-8 align-baseline">
-            <Logo href="/" />
-          </div>
-          <div className="flex items-center gap-8">
-            <a
-              href="https://github.com/shreyansqt/covercraft-ai"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-muted-foreground hover:text-secondary"
-            >
-              <GithubLogo className="size-6" weight="duotone" />
-              <span>GitHub</span>
-            </a>
-            {session ? (
-              <>
-                <Button variant="outline" asChild>
-                  <Link href="/app">Go to app</Link>
-                </Button>
-              </>
-            ) : (
-              <SignIn />
-            )}
-          </div>
-        </div>
-      </header>
       <div className="flex flex-col mx-auto container">
         {/* Hero Section */}
         <div className="flex flex-col gap-6 mx-auto py-24 max-w-3xl text-center">

@@ -1,5 +1,5 @@
 "use client";
-import { Header } from "@/components/header";
+import { AppHeader } from "@/components/app-header";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { useLLMSettings } from "@/hooks/use-llm-settings";
@@ -9,9 +9,9 @@ export default function LLMSettingsPage() {
   const { llmSettings, setLLMSettings } = useLLMSettings();
   return (
     <div className="flex flex-col h-full">
-      <Header>
+      <AppHeader>
         <h1 className="font-semibold text-2xl">Prompts</h1>
-      </Header>
+      </AppHeader>
 
       {Object.keys(llmSettings).map((key) => (
         <div className="flex flex-col flex-1 px-6 py-4" key={key}>

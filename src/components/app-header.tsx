@@ -1,7 +1,7 @@
 "use client";
 import { SidebarTrigger, useSidebar } from "./ui/sidebar";
 
-export const Header = ({ children }: { children: React.ReactNode }) => {
+export const AppHeader = ({ children }: { children: React.ReactNode }) => {
   const { open, isMobile } = useSidebar();
   return (
     <header className="px-6 py-4 border-b">

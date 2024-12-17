@@ -2,6 +2,8 @@ import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
 import { Outfit } from "next/font/google";
 
+import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -58,9 +60,13 @@ export const metadata: Metadata = {
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${outfit.variable} antialiased relative`}>
+      <body
+        className={`${outfit.variable} antialiased relative min-h-screen flex flex-col`}
+      >
         <Analytics debug={false} />
-        {props.children}
+        <SiteHeader />
+        <div className="mx-auto container">{props.children}</div>
+        <SiteFooter className="mt-auto" />
       </body>
     </html>
   );

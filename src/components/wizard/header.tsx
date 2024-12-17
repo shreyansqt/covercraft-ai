@@ -3,7 +3,7 @@ import { deleteCoverLetter } from "@/services/cover-letter";
 import type { TypedCoverLetter } from "@/types";
 import { Trash } from "@phosphor-icons/react/dist/ssr";
 import { useRouter } from "next/navigation";
-import { Header } from "../header";
+import { AppHeader } from "../app-header";
 import { Button } from "../ui/button";
 
 export const CoverLetterHeader = ({
@@ -17,7 +17,7 @@ export const CoverLetterHeader = ({
     router.refresh();
   };
   return (
-    <Header>
+    <AppHeader>
       <div className="flex justify-between items-center">
         <div>
           <h1 className="font-semibold text-2xl">
@@ -38,6 +38,6 @@ export const CoverLetterHeader = ({
           </Button>
         </div>
       </div>
-    </Header>
+    </AppHeader>
   );
 };
