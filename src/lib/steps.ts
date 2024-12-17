@@ -74,20 +74,18 @@ export const canGoToStep = (step: Step, coverLetter: TypedCoverLetter) => {
 };
 
 export const getCurrentStep = (coverLetter: TypedCoverLetter) => {
-  if (canGoToStep(Step.Keywords, coverLetter)) {
-    return Step.Keywords;
-  }
   if (canGoToStep(Step.Review, coverLetter)) {
     return Step.Review;
   }
-  if (canGoToStep(Step.Chat, coverLetter)) {
-    return Step.Chat;
+  if (canGoToStep(Step.Keywords, coverLetter)) {
+    return Step.Keywords;
   }
   return Step.Info;
 };
 
 export const getCurrentStepPath = (coverLetter: TypedCoverLetter) => {
   const currentStep = getCurrentStep(coverLetter);
+  console.log(coverLetter.jobInfo?.companyName, currentStep);
   return `/app/cover-letter/${coverLetter.id}/${currentStep}`;
 };
 

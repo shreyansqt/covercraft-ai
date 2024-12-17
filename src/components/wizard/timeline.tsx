@@ -1,10 +1,5 @@
 "use client";
-import {
-  getCurrentStepIndex,
-  getStepLabel,
-  steps,
-  type Step,
-} from "@/lib/steps";
+import { canGoToStep, getStepLabel, steps, type Step } from "@/lib/steps";
 import { cn } from "@/lib/utils";
 import type { TypedCoverLetter } from "@/types";
 import Link from "next/link";
@@ -16,12 +11,10 @@ export function Timeline({
   coverLetter: TypedCoverLetter;
   activeStep: Step;
 }) {
-  const currentStepIndex = getCurrentStepIndex(coverLetter);
-
   return (
     <div className="flex flex-shrink-0 justify-around px-4 py-3">
       {steps.map((step, i) => {
-        const isDisabled = i > currentStepIndex;
+        const isDisabled = !canGoToStep(step, coverLetter);
         return (
           <Link
             key={i}
@@ -30,7 +23,7 @@ export function Timeline({
             }
             className={cn(
               "flex items-center gap-2",
-              i > currentStepIndex && "disabled opacity-50 pointer-events-none"
+              isDisabled && "disabled opacity-50 pointer-events-none"
             )}
           >
             <div
