@@ -104,7 +104,7 @@ export const updateCoverLetter = async (
   });
 };
 
-export const generateJobInfo = async (id: string, jobInfoPrompt: string) => {
+export const generateJobInfo = async (id: string) => {
   const resume = await getResume();
   if (!resume) {
     throw new Error("Resume not found");
@@ -119,7 +119,7 @@ export const generateJobInfo = async (id: string, jobInfoPrompt: string) => {
     model: openai(process.env.OPENAI_MODEL || "gpt-4o-mini"),
     schemaName: "jobSummary",
     schema: jobInfoSchema,
-    prompt: addContextToPrompt(jobInfoPrompt, coverLetter, resume.content),
+    prompt: addContextToPrompt("", coverLetter, resume.content),
   });
 
   await updateCoverLetter(id, { jobInfo: result.object });
@@ -150,6 +150,8 @@ export const generateKeywords = async (id: string, keywordsPrompt: string) => {
   await updateCoverLetter(id, {
     keywords: result.object.keywords,
   });
+
+  return result.object.keywords;
 };
 
 export const generateCoverLetter = async (

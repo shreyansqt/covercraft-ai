@@ -19,7 +19,7 @@ export function Timeline({
   const currentStepIndex = getCurrentStepIndex(coverLetter);
 
   return (
-    <div className="flex justify-around px-4 py-3">
+    <div className="flex flex-shrink-0 justify-around px-4 py-3">
       {steps.map((step, i) => {
         const isDisabled = i > currentStepIndex;
         return (

@@ -17,7 +17,7 @@ export const CoverLetterHeader = ({
     router.refresh();
   };
   return (
-    <AppHeader>
+    <AppHeader className="flex-shrink-0">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="font-semibold text-2xl">
@@ -28,7 +28,7 @@ export const CoverLetterHeader = ({
           </p>
         </div>
         <div className="flex items-center gap-4">
-          {coverLetter.jobInfo?.matchScore && (
+          {coverLetter.jobInfo?.matchScore !== undefined && (
             <p className="font-bold text-muted-foreground text-xl">
               {coverLetter.jobInfo.matchScore}% match
             </p>

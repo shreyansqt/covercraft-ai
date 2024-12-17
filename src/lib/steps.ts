@@ -1,55 +1,48 @@
 import StepChat from "@/components/wizard/step-chat";
-import { StepCompanyInfo } from "@/components/wizard/step-company-info";
-import { StepJobDescription } from "@/components/wizard/step-job-description";
+import { StepInfo } from "@/components/wizard/step-info";
 import { StepKeywords } from "@/components/wizard/step-keywords";
 import { StepReview } from "@/components/wizard/step-review";
 import type { TypedCoverLetter } from "@/types";
 import { redirect } from "next/navigation";
 
 export enum Step {
-  JobDescription = "job-description",
-  CompanyInfo = "company-info",
+  Info = "info",
   Keywords = "keywords",
   Review = "review",
   Chat = "chat",
 }
 
 export const steps = [
-  Step.JobDescription,
-  Step.CompanyInfo,
+  Step.Info,
   Step.Keywords,
   Step.Review,
   Step.Chat,
 ] as const;
 
 const stepComponents = {
-  [Step.JobDescription]: StepJobDescription,
-  [Step.CompanyInfo]: StepCompanyInfo,
+  [Step.Info]: StepInfo,
   [Step.Keywords]: StepKeywords,
   [Step.Review]: StepReview,
   [Step.Chat]: StepChat,
 };
 
 const stepLabels = {
-  [Step.JobDescription]: "Job Description",
-  [Step.CompanyInfo]: "Company Info",
-  [Step.Keywords]: "Keywords",
+  [Step.Info]: "Enter Job Info",
+  [Step.Keywords]: "Select Relevant Keywords",
   [Step.Review]: "Review & Export",
   [Step.Chat]: "Chat",
 };
 
-const preStepRequirements: Record<Step, (keyof TypedCoverLetter)[]> = {
-  [Step.JobDescription]: [],
-  [Step.CompanyInfo]: ["jobDescription"],
-  [Step.Keywords]: ["jobDescription", "jobInfo", "companyInfo"],
-  [Step.Review]: ["jobDescription", "jobInfo", "companyInfo", "keywords"],
-  [Step.Chat]: [
-    "jobDescription",
-    "jobInfo",
-    "companyInfo",
-    "keywords",
-    "content",
-  ],
+const preStepRequirements: Record<
+  Step,
+  (coverLetter: TypedCoverLetter) => boolean
+> = {
+  [Step.Info]: () => true,
+  [Step.Keywords]: (coverLetter) => !!coverLetter.jobDescription,
+  [Step.Review]: (coverLetter) =>
+    !!coverLetter.jobDescription && coverLetter.keywords.length > 0,
+  [Step.Chat]: (coverLetter) =>
+    !!coverLetter.jobDescription && coverLetter.keywords.length > 0,
 };
 
 export const getStepLabel = (step: Step) => stepLabels[step];
@@ -77,24 +70,20 @@ export const goToPreviousStep = (id: string, activeStep: Step) => {
 };
 
 export const canGoToStep = (step: Step, coverLetter: TypedCoverLetter) => {
-  const requiredKeys = preStepRequirements[step];
-  return requiredKeys.every((key) => coverLetter[key]);
+  return preStepRequirements[step](coverLetter);
 };
 
 export const getCurrentStep = (coverLetter: TypedCoverLetter) => {
-  if (!coverLetter.jobDescription) {
-    return Step.JobDescription;
-  }
-  if (!coverLetter.companyInfo) {
-    return Step.CompanyInfo;
-  }
-  if (coverLetter.keywords.length === 0) {
+  if (canGoToStep(Step.Keywords, coverLetter)) {
     return Step.Keywords;
   }
-  if (!coverLetter.content) {
+  if (canGoToStep(Step.Review, coverLetter)) {
     return Step.Review;
   }
-  return Step.Chat;
+  if (canGoToStep(Step.Chat, coverLetter)) {
+    return Step.Chat;
+  }
+  return Step.Info;
 };
 
 export const getCurrentStepPath = (coverLetter: TypedCoverLetter) => {

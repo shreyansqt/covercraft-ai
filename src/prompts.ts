@@ -1,5 +1,3 @@
-export const jobInfoPrompt = `Based on the above context, provide structured data in JSON format, make sure the match score is between 0 and 100`;
-
 export const keywordsPrompt = `Provide structured data based on the following job description and company info. Respond in JSON format:
 roleName: (job title/role name)
 companyName: (company name)

@@ -128,15 +128,6 @@ export async function AppSidebar({ user }: { user: User }) {
           </SidebarGroup>
         </Collapsible>
         <div className="flex flex-row gap-1 pt-2 border-t">
-          <Button variant="ghost" className="w-full" asChild size="sm">
-            <Link
-              href="https://www.buymeacoffee.com/shreyansqt"
-              target="_blank"
-            >
-              <Coffee weight="duotone" />
-              Buy me a coffee
-            </Link>
-          </Button>
           <Button variant="outline" className="w-full" asChild size="sm">
             <Link
               href="mailto:hello@covercraftai.com?subject=Feedback on CoverCraft AI"
@@ -144,6 +135,15 @@ export async function AppSidebar({ user }: { user: User }) {
             >
               <Envelope weight="duotone" />
               Feedback
+            </Link>
+          </Button>
+          <Button variant="ghost" className="w-full" asChild size="sm">
+            <Link
+              href="https://www.buymeacoffee.com/shreyansqt"
+              target="_blank"
+            >
+              <Coffee weight="duotone" />
+              Buy me a coffee
             </Link>
           </Button>
         </div>

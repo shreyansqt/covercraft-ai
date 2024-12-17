@@ -9,14 +9,8 @@ export const addContextToPrompt = (
   coverLetter: TypedCoverLetter,
   resume: string
 ): string => {
-  const result = `Applicant Resume: ${resume}
+  const result = `${getLabeledValue("Applicant Resume", resume)}
     ${getLabeledValue("Job Description", coverLetter.jobDescription)}
-    ${getLabeledValue("Company Name", coverLetter?.jobInfo?.companyName)}
-    ${getLabeledValue("Role Name", coverLetter?.jobInfo?.roleName)}
-    ${getLabeledValue(
-      "Match Score",
-      coverLetter?.jobInfo?.matchScore?.toString()
-    )}
     ${getLabeledValue("Company Info", coverLetter?.companyInfo)}
     ${getLabeledValue(
       "Selected Keywords",

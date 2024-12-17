@@ -48,7 +48,6 @@ export const StepReview = ({
       <div className="flex justify-between items-center">
         <div className="flex items-center gap-2">
           <Label htmlFor="coverLetter">Generated Cover Letter</Label>
-          {isLoading && <Spinner className="animate-spin" />}
         </div>
 
         <div className="flex items-center gap-2">
@@ -65,13 +64,17 @@ export const StepReview = ({
           </Button>
         </div>
       </div>
-      {coverLetter.content && (
-        <RichTextEditor
-          value={coverLetter.content}
-          onBlur={handleBlur}
-          disabled={isLoading}
-          className="flex-1"
-        />
+      {isLoading ? (
+        <Spinner size={24} className="m-auto animate-spin" />
+      ) : (
+        coverLetter.content && (
+          <RichTextEditor
+            value={coverLetter.content}
+            onBlur={handleBlur}
+            disabled={isLoading}
+            className="flex-1"
+          />
+        )
       )}
     </div>
   );
