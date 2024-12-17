@@ -13,19 +13,22 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { getCoverLetters } from "@/services/cover-letter";
-import {} from "@phosphor-icons/react";
 import {
   CaretCircleUp,
+  Coffee,
+  Envelope,
   SignOut,
   Sparkle,
   UserSquare,
 } from "@phosphor-icons/react/dist/ssr";
 import type { User } from "@prisma/client";
+import Link from "next/link";
 import { AddCoverLetterButton } from "./add-cover-letter-button";
 import CoverLetterMenuItem from "./cover-letter-menu-item";
 import { Logo } from "./logo";
 import { SettingsMenuItem } from "./settings-menu-item";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
+import { Button } from "./ui/button";
 import {
   Collapsible,
   CollapsibleContent,
@@ -71,7 +74,7 @@ export async function AppSidebar({ user }: { user: User }) {
         <Collapsible className="group/collapsible">
           <SidebarGroup>
             <SidebarGroupLabel asChild>
-              <CollapsibleTrigger className="py-2 h-auto">
+              <CollapsibleTrigger>
                 <div className="flex items-center min-w-0">
                   <Avatar className="bg-gray-200 size-8">
                     <AvatarImage src={user.image || ""} />
@@ -95,7 +98,7 @@ export async function AppSidebar({ user }: { user: User }) {
                 />
               </CollapsibleTrigger>
             </SidebarGroupLabel>
-            <CollapsibleContent>
+            <CollapsibleContent className="mt-4">
               <SidebarGroupContent>
                 <SidebarMenu>
                   {settingsMenuItems.map(({ label, href, icon: Icon }) => (
@@ -124,6 +127,26 @@ export async function AppSidebar({ user }: { user: User }) {
             </CollapsibleContent>
           </SidebarGroup>
         </Collapsible>
+        <div className="flex flex-row gap-1 pt-2 border-t">
+          <Button variant="ghost" className="w-full" asChild size="sm">
+            <Link
+              href="https://www.buymeacoffee.com/shreyansqt"
+              target="_blank"
+            >
+              <Coffee weight="duotone" />
+              Buy me a coffee
+            </Link>
+          </Button>
+          <Button variant="outline" className="w-full" asChild size="sm">
+            <Link
+              href="mailto:hello@covercraftai.com?subject=Feedback on CoverCraft AI"
+              target="_blank"
+            >
+              <Envelope weight="duotone" />
+              Feedback
+            </Link>
+          </Button>
+        </div>
       </SidebarFooter>
     </Sidebar>
   );
